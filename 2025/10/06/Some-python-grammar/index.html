@@ -55,7 +55,9 @@
 
     <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
 
-<meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"><link rel="stylesheet" href="/css/prism.css" type="text/css"></head>
 
 
 <body>
@@ -505,7 +507,6 @@ print(1, 2, 3, sep&#x3D;&#39;-&#39;)  # 输出: 1-2-3
 print(1, end&#x3D;&#39; &#39;)        # 输出: 1 (不换行，以空格结束)
 print(2)                 # 输出: 2 (换行)
 # 最终效果: 1 2<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <h2 id="Trick"><a href="#Trick" class="headerlink" title="Trick"></a>Trick</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">mid&#x3D;(l+r)&#x2F;&#x2F;2 #python不声明类型，&#x2F;可能出现浮点数，故&#x2F;&#x2F;为整数除法
 TreeNode(nums[mid])#__init__为构造函数，直接调用即可
 
@@ -581,35 +582,27 @@ num,counts&#x3D;np.unique(y,return_counts&#x3D;True)
         np.random.shuffle(indices)
 
             sampled_indices &#x3D; np.random.choice(indices, size&#x3D;n_samples, replace&#x3D;True)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 <pre><code>train_indices = np.concatenate(folds[:i] + folds[i+1:])  # 其余合并为训练集
 #类似extend
-</code></pre>
-<ul>
+</code></pre><ul>
 <li><code>input()</code>：读取一行输入，返回字符串。</li>
 <li><code>split()</code>：按空白字符（空格、制表符、换行）分割字符串。</li>
-<li><code>map(func, iterable)</code>：对列表中的每个元素应用函数（如 <code>int</code>）。</li>
-<li><code>list()</code>：将 <code>map</code> 对象转为列表</li>
+<li><code>map(func, iterable)</code>：对列表中的每个元素应用函数（如 <code>int</code>）。</li>
+<li><code>list()</code>：将 <code>map</code> 对象转为列表</li>
 <li><code>n = int(input())  假如第一行的数字代表数据组个数</code></li>
-<li><pre class=" language-language-pyhton"><code class="language-language-pyhton">folds = np.array_split(indices, 5)
-folds[0] = array([0, 1])      # 第0折：2个样本
-folds[1] = array([2, 3])      # 第1折：2个样本
-folds[2] = array([4, 5])      # 第2折：2个样本
-folds[3] = array([6, 7])      # 第3折：2个样本
-folds[4] = array([8, 9])      # 第4折：2个样本
-<pre class="line-numbers language-none"><code class="language-none">
+<li>```pyhton<br>folds = np.array_split(indices, 5)<br>folds[0] = array([0, 1])      # 第0折：2个样本<br>folds[1] = array([2, 3])      # 第1折：2个样本<br>folds[2] = array([4, 5])      # 第2折：2个样本<br>folds[3] = array([6, 7])      # 第3折：2个样本<br>folds[4] = array([8, 9])      # 第4折：2个样本<pre class="line-numbers language-none"><code class="language-none">
 ## DICT
 
 &#96;&#96;&#96;python
 d &#x3D; &#123;&#125;
-d['key1'] &#x3D; 100           # 方式1：直接赋值（推荐）
-del d['key1']             # 删除键，不存在会报错 KeyError
-d.pop('key2')             # 删除并返回值，不存在可设默认值 d.pop('key2', None)
-d['key1'] &#x3D; 999           # 直接赋值修改
-d.update(&#123;'key1': 888&#125;)   # 批量更新
-value &#x3D; d['key1']         # 获取值，key 不存在会报错
-value &#x3D; d.get('key1', -1) # 获取值，不存在返回默认值（推荐）
-'key1' in d               # 检查 key 是否存在，返回 True&#x2F;False
+d[&#39;key1&#39;] &#x3D; 100           # 方式1：直接赋值（推荐）
+del d[&#39;key1&#39;]             # 删除键，不存在会报错 KeyError
+d.pop(&#39;key2&#39;)             # 删除并返回值，不存在可设默认值 d.pop(&#39;key2&#39;, None)
+d[&#39;key1&#39;] &#x3D; 999           # 直接赋值修改
+d.update(&#123;&#39;key1&#39;: 888&#125;)   # 批量更新
+value &#x3D; d[&#39;key1&#39;]         # 获取值，key 不存在会报错
+value &#x3D; d.get(&#39;key1&#39;, -1) # 获取值，不存在返回默认值（推荐）
+&#39;key1&#39; in d               # 检查 key 是否存在，返回 True&#x2F;False
 d.keys()    # 所有键
 d.values()  # 所有值
 d.items()   # 所有键值对 (key, value)
@@ -625,7 +618,6 @@ sorted_mp&#x3D;sorted(mp.items(),key&#x3D;lambda x:x[1],reverse&#x3D;True)
 
 # 从大到小排序
 sorted_by_value_desc &#x3D; dict(sorted(d.items(), key&#x3D;lambda x: x[1], reverse&#x3D;True))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-</code></pre>
 </li>
 </ul>
 <h2 id="SET"><a href="#SET" class="headerlink" title="SET"></a>SET</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">s &#x3D; set()           # 正确：创建空集合
@@ -645,7 +637,7 @@ sorted_list_desc &#x3D; sorted(s, reverse&#x3D;True)  # 降序
 
 nums.sort(key&#x3D;lambda x: (x[0], -x[1]))
 #第一个升序，第二个降序<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -653,23 +645,26 @@ nums.sort(key&#x3D;lambda x: (x[0], -x[1]))
 <th>说明</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>nums.sort()</code></td>
-<td>对列表 <code>nums</code> <strong>原地排序</strong></td>
+<td>对列表 <code>nums</code> <strong>原地排序</strong></td>
 </tr>
 <tr>
 <td><code>key=</code></td>
-<td>指定一个函数，告诉 Python <strong>按什么规则排序</strong></td>
+<td>指定一个函数，告诉 Python <strong>按什么规则排序</strong></td>
 </tr>
 <tr>
 <td><code>lambda x: ...</code></td>
-<td>匿名函数，输入是列表中的每个元素 <code>x</code>，输出是一个“排序键”</td>
+<td>匿名函数，输入是列表中的每个元素 <code>x</code>，输出是一个“排序键”</td>
 </tr>
 <tr>
 <td><code>(x[0], -x[1])</code></td>
 <td>返回一个元组，作为排序的依据</td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="LIST"><a href="#LIST" class="headerlink" title="LIST"></a>LIST</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">dp &#x3D; [0] * (k + 1)
 #用list模拟数组
 stack &#x3D; []
@@ -708,9 +703,6 @@ del lst[1]       # 删除索引 1 的元素
 nums[k:] &#x3D; nums[k:][::-1]#倒序（reverse）
 #使用nums[k:].reverse()会创建新数组，不改变原list，并且返回None
 sorted_nums &#x3D; sorted(nums, key&#x3D;lambda x: (x[0], -x[1]))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
-
-
 <h2 id="QUEUE"><a href="#QUEUE" class="headerlink" title="QUEUE"></a>QUEUE</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">from collections import deque
 q &#x3D; deque()
 q.append(1)               # 从右边入队
@@ -720,28 +712,29 @@ front &#x3D; q.popleft()       # 从左边出队，FIFO，O(1)
 q[0] &#x3D; 99                 # 修改队首（支持索引访问）
 q[-1] &#x3D; 88                # 修改队尾
 orted_list &#x3D; sorted(q)   # 转为排序列表<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
+<div class="table-container">
 <table>
 <thead>
 <tr>
 <th>操作</th>
 <th><code>dict</code></th>
 <th><code>set</code></th>
-<th><code>list</code> (栈)</th>
-<th><code>deque</code> (队列)</th>
+<th><code>list</code> (栈)</th>
+<th><code>deque</code> (队列)</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><strong>增</strong></td>
-<td><code>d[k]=v</code>, <code>d.update()</code></td>
-<td><code>s.add()</code>, <code>s.update()</code></td>
+<td><code>d[k]=v</code>, <code>d.update()</code></td>
+<td><code>s.add()</code>, <code>s.update()</code></td>
 <td><code>lst.append()</code></td>
-<td><code>q.append()</code>, <code>q.appendleft()</code></td>
+<td><code>q.append()</code>, <code>q.appendleft()</code></td>
 </tr>
 <tr>
 <td><strong>删</strong></td>
-<td><code>del d[k]</code>, <code>d.pop(k)</code></td>
-<td><code>s.remove()</code>, <code>s.discard()</code></td>
+<td><code>del d[k]</code>, <code>d.pop(k)</code></td>
+<td><code>s.remove()</code>, <code>s.discard()</code></td>
 <td><code>lst.pop()</code></td>
 <td><code>q.popleft()</code></td>
 </tr>
@@ -754,10 +747,10 @@ orted_list &#x3D; sorted(q)   # 转为排序列表<span aria-hidden="true" class
 </tr>
 <tr>
 <td><strong>查</strong></td>
-<td><code>k in d</code>, <code>d.get(k)</code></td>
+<td><code>k in d</code>, <code>d.get(k)</code></td>
 <td><code>x in s</code></td>
-<td><code>lst[-1]</code>, <code>x in lst</code></td>
-<td><code>q[0]</code>, <code>x in q</code></td>
+<td><code>lst[-1]</code>, <code>x in lst</code></td>
+<td><code>q[0]</code>, <code>x in q</code></td>
 </tr>
 <tr>
 <td><strong>排序</strong></td>
@@ -766,7 +759,10 @@ orted_list &#x3D; sorted(q)   # 转为排序列表<span aria-hidden="true" class
 <td><code>lst.sort()</code></td>
 <td><code>sorted(q)</code></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
+<div class="table-container">
 <table>
 <thead>
 <tr>
@@ -775,17 +771,20 @@ orted_list &#x3D; sorted(q)   # 转为排序列表<span aria-hidden="true" class
 <th>示例</th>
 </tr>
 </thead>
-<tbody><tr>
+<tbody>
+<tr>
 <td><code>append(iterable)</code></td>
 <td>把整个对象当作一个元素添加</td>
-<td><code>q.append([1,2])</code> → <code>deque([[1,2]])</code></td>
+<td><code>q.append([1,2])</code> → <code>deque([[1,2]])</code></td>
 </tr>
 <tr>
 <td><code>extend(iterable)</code></td>
 <td>把可迭代对象的<strong>每个元素</strong>逐个添加</td>
-<td><code>q.extend([1,2])</code> → <code>deque([1, 2])</code></td>
+<td><code>q.extend([1,2])</code> → <code>deque([1, 2])</code></td>
 </tr>
-</tbody></table>
+</tbody>
+</table>
+</div>
 <h2 id="FOR"><a href="#FOR" class="headerlink" title="FOR"></a>FOR</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">for i, num in enumerate(nums):  # 更简洁地遍历索引和
 for i, char in enumerate(s):
 s &#x3D; &quot;abc&quot;
@@ -798,7 +797,6 @@ for i, char in enumerate(s):
 
 # 保留索引不在 &#96;indices_to_remove&#96; 中的元素
 result &#x3D; [value for index, value in enumerate(data) if index not in indices_to_remove]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
-
 
                 
             </div>
@@ -947,17 +945,18 @@ result &#x3D; [value for index, value in enumerate(data) if index not in indices
 <article id="prenext-posts" class="prev-next articles">
     <div class="row article-row">
         
-        <div class="article col s12 m6" data-aos="fade-up">
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
             <div class="article-badge left-badge text-color">
-                <i class="fas fa-chevron-left"></i>&nbsp;上一篇</div>
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
             <div class="card">
-                <a href="/2025/10/08/Image-as-IMU/">
+                <a href="/2025/10/06/Some-python-grammar/">
                     <div class="card-image">
                         
                         
-                        <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="Image as IMU">
+                        <img src="/medias/featureimages/1.jpg" class="responsive-img" alt="Some python grammar">
                         
-                        <span class="card-title">Image as IMU</span>
+                        <span class="card-title">Some python grammar</span>
                     </div>
                 </a>
                 <div class="card-content article-content">
@@ -967,34 +966,31 @@ result &#x3D; [value for index, value in enumerate(data) if index not in indices
                         
                     </div>
                     <div class="publish-info">
-                        <span class="publish-date">
-                            <i class="far fa-clock fa-fw icon-date"></i>2025-10-08
-                        </span>
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-10-06
+                            </span>
                         <span class="publish-author">
                             
                             <i class="fas fa-bookmark fa-fw icon-category"></i>
                             
-                            <a href="/categories/2025ICCV/" class="post-category">
-                                    2025ICCV
+                            <a href="/categories/Python/" class="post-category">
+                                    Python
                                 </a>
                             
                             
                         </span>
                     </div>
                 </div>
+
                 
                 <div class="card-action article-tags">
                     
-                    <a href="/tags/%E8%BF%90%E5%8A%A8%E6%A8%A1%E7%B3%8A/">
-                        <span class="chip bg-color">运动模糊</span>
+                    <a href="/tags/Python/">
+                        <span class="chip bg-color">Python</span>
                     </a>
                     
-                    <a href="/tags/%E8%BF%90%E5%8A%A8%E4%BC%B0%E8%AE%A1/">
-                        <span class="chip bg-color">运动估计</span>
-                    </a>
-                    
-                    <a href="/tags/CV/">
-                        <span class="chip bg-color">CV</span>
+                    <a href="/tags/%E7%AE%97%E6%B3%95/">
+                        <span class="chip bg-color">算法</span>
                     </a>
                     
                 </div>
@@ -1229,7 +1225,7 @@ result &#x3D; [value for index, value in enumerate(data) if index not in indices
             <br>
             
                 &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
-                        class="white-color">4.3k</span>
+                        class="white-color">2.3k</span>
             
             
             
