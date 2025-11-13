@@ -1,0 +1,2227 @@
+<!DOCTYPE HTML>
+<html lang="zh-CN">
+
+
+<head>
+    <meta charset="utf-8">
+    <meta name="keywords" content="diffusers, Chenzhou">
+    <meta name="description" content="diffusers的核心是模型和调度器，diffusionPipeline也可以把这些组件捆绑在一起方便查看，在 diffusers 库中，Pipeline 封装了从模型加载、噪声调度到最终采样生成图像的整个流程。这篇文章主要参考diffu">
+    <meta http-equiv="X-UA-Compatible" content="IE=edge">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
+    <meta name="renderer" content="webkit|ie-stand|ie-comp">
+    <meta name="mobile-web-app-capable" content="yes">
+    <meta name="format-detection" content="telephone=no">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+    <meta name="referrer" content="no-referrer-when-downgrade">
+    <!-- Global site tag (gtag.js) - Google Analytics -->
+
+
+    <title>diffusers | Chenzhou</title>
+    <link rel="icon" type="image/png" href="/favicon.png">
+    
+
+
+    <!-- bg-cover style     -->
+
+
+
+<link rel="stylesheet" type="text/css" href="/libs/awesome/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/materialize/materialize.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/aos/aos.css">
+<link rel="stylesheet" type="text/css" href="/libs/animate/animate.min.css">
+<link rel="stylesheet" type="text/css" href="/libs/lightGallery/css/lightgallery.min.css">
+<link rel="stylesheet" type="text/css" href="/css/matery.css">
+<link rel="stylesheet" type="text/css" href="/css/my.css">
+<link rel="stylesheet" type="text/css" href="/css/dark.css" media="none" onload="if(media!='all')media='all'">
+
+
+
+
+    <link rel="stylesheet" href="/libs/tocbot/tocbot.css">
+    <link rel="stylesheet" href="/css/post.css">
+
+
+
+
+    
+        <link rel="stylesheet" type="text/css" href="/css/reward.css">
+    
+
+
+
+    <script src="/libs/jquery/jquery-3.6.0.min.js"></script>
+
+<!-- hexo injector head_end start -->
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/katex@0.12.0/dist/katex.min.css">
+<!-- hexo injector head_end end --><meta name="generator" content="Hexo 7.3.0"></head>
+
+
+<body>
+    <header class="navbar-fixed">
+    <nav id="headNav" class="bg-color nav-transparent">
+        <div id="navContainer" class="nav-wrapper container">
+            <div class="brand-logo">
+                <a href="/" class="waves-effect waves-light">
+                    
+                    <img src="/medias/logo.png" class="logo-img" alt="LOGO">
+                    
+                    <span class="logo-span">Chenzhou</span>
+                </a>
+            </div>
+            
+
+<a href="#" data-target="mobile-nav" class="sidenav-trigger button-collapse"><i class="fas fa-bars"></i></a>
+<ul class="right nav-menu">
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/" class="waves-effect waves-light">
+      
+      <i class="fas fa-home" style="zoom: 0.6;"></i>
+      
+      <span>首页</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/tags" class="waves-effect waves-light">
+      
+      <i class="fas fa-tags" style="zoom: 0.6;"></i>
+      
+      <span>标签</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/categories" class="waves-effect waves-light">
+      
+      <i class="fas fa-bookmark" style="zoom: 0.6;"></i>
+      
+      <span>分类</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/archives" class="waves-effect waves-light">
+      
+      <i class="fas fa-archive" style="zoom: 0.6;"></i>
+      
+      <span>归档</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/about" class="waves-effect waves-light">
+      
+      <i class="fas fa-user-circle" style="zoom: 0.6;"></i>
+      
+      <span>关于</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/contact" class="waves-effect waves-light">
+      
+      <i class="fas fa-comments" style="zoom: 0.6;"></i>
+      
+      <span>留言板</span>
+    </a>
+    
+  </li>
+  
+  <li class="hide-on-med-and-down nav-item">
+    
+    <a href="/friends" class="waves-effect waves-light">
+      
+      <i class="fas fa-address-book" style="zoom: 0.6;"></i>
+      
+      <span>友情链接</span>
+    </a>
+    
+  </li>
+  
+  <li>
+    <a href="#searchModal" class="modal-trigger waves-effect waves-light">
+      <i id="searchIcon" class="fas fa-search" title="搜索" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+  <li>
+    <a href="javascript:;" class="waves-effect waves-light" onclick="switchNightMode()" title="深色/浅色模式" >
+      <i id="sum-moon-icon" class="fas fa-sun" style="zoom: 0.85;"></i>
+    </a>
+  </li>
+</ul>
+
+
+<div id="mobile-nav" class="side-nav sidenav">
+
+    <div class="mobile-head bg-color">
+        
+        <img src="/medias/logo.png" class="logo-img circle responsive-img">
+        
+        <div class="logo-name">Chenzhou</div>
+        <div class="logo-desc">
+            
+            Though we drift apart for a while, we are destined to meet again.
+            
+        </div>
+    </div>
+
+    <ul class="menu-list mobile-menu-list">
+        
+        <li class="m-nav-item">
+	  
+		<a href="/" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-home"></i>
+			
+			首页
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/tags" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-tags"></i>
+			
+			标签
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/categories" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-bookmark"></i>
+			
+			分类
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/archives" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-archive"></i>
+			
+			归档
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/about" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-user-circle"></i>
+			
+			关于
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/contact" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-comments"></i>
+			
+			留言板
+		</a>
+          
+        </li>
+        
+        <li class="m-nav-item">
+	  
+		<a href="/friends" class="waves-effect waves-light">
+			
+			    <i class="fa-fw fas fa-address-book"></i>
+			
+			友情链接
+		</a>
+          
+        </li>
+        
+        
+        <li><div class="divider"></div></li>
+        <li>
+            <a href="https://github.com/blinkfox/hexo-theme-matery" class="waves-effect waves-light" target="_blank">
+                <i class="fab fa-github-square fa-fw"></i>Fork Me
+            </a>
+        </li>
+        
+    </ul>
+</div>
+
+
+        </div>
+
+        
+            <style>
+    .nav-transparent .github-corner {
+        display: none !important;
+    }
+
+    .github-corner {
+        position: absolute;
+        z-index: 10;
+        top: 0;
+        right: 0;
+        border: 0;
+        transform: scale(1.1);
+    }
+
+    .github-corner svg {
+        color: #0f9d58;
+        fill: #fff;
+        height: 64px;
+        width: 64px;
+    }
+
+    .github-corner:hover .octo-arm {
+        animation: a 0.56s ease-in-out;
+    }
+
+    .github-corner .octo-arm {
+        animation: none;
+    }
+
+    @keyframes a {
+        0%,
+        to {
+            transform: rotate(0);
+        }
+        20%,
+        60% {
+            transform: rotate(-25deg);
+        }
+        40%,
+        80% {
+            transform: rotate(10deg);
+        }
+    }
+</style>
+
+<a href="https://github.com/blinkfox/hexo-theme-matery" class="github-corner tooltipped hide-on-med-and-down" target="_blank"
+   data-tooltip="Fork Me" data-position="left" data-delay="50">
+    <svg viewBox="0 0 250 250" aria-hidden="true">
+        <path d="M0,0 L115,115 L130,115 L142,142 L250,250 L250,0 Z"></path>
+        <path d="M128.3,109.0 C113.8,99.7 119.0,89.6 119.0,89.6 C122.0,82.7 120.5,78.6 120.5,78.6 C119.2,72.0 123.4,76.3 123.4,76.3 C127.3,80.9 125.5,87.3 125.5,87.3 C122.9,97.6 130.6,101.9 134.4,103.2"
+              fill="currentColor" style="transform-origin: 130px 106px;" class="octo-arm"></path>
+        <path d="M115.0,115.0 C114.9,115.1 118.7,116.5 119.8,115.4 L133.7,101.6 C136.9,99.2 139.9,98.4 142.2,98.6 C133.8,88.0 127.5,74.4 143.8,58.0 C148.5,53.4 154.0,51.2 159.7,51.0 C160.3,49.4 163.2,43.6 171.4,40.1 C171.4,40.1 176.1,42.5 178.8,56.2 C183.1,58.6 187.2,61.8 190.9,65.4 C194.5,69.0 197.7,73.2 200.1,77.6 C213.8,80.2 216.3,84.9 216.3,84.9 C212.7,93.1 206.9,96.0 205.4,96.6 C205.1,102.4 203.0,107.8 198.3,112.5 C181.9,128.9 168.3,122.5 157.7,114.1 C157.9,116.9 156.7,120.9 152.7,124.9 L141.0,136.5 C139.8,137.7 141.6,141.9 141.8,141.8 Z"
+              fill="currentColor" class="octo-body"></path>
+    </svg>
+</a>
+        
+    </nav>
+
+</header>
+
+    
+
+
+
+<div class="bg-cover pd-header post-cover" style="background-image: url('/medias/featureimages/3.jpg')">
+    <div class="container" style="right: 0px;left: 0px;">
+        <div class="row">
+            <div class="col s12 m12 l12">
+                <div class="brand">
+                    <h1 class="description center-align post-title">diffusers</h1>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+
+
+
+<main class="post-container content">
+
+    
+    <div class="row">
+    <div id="main-content" class="col s12 m12 l9">
+        <!-- 文章内容详情 -->
+<div id="artDetail">
+    <div class="card">
+        <div class="card-content article-info">
+            <div class="row tag-cate">
+                <div class="col s7">
+                    
+                    <div class="article-tag">
+                        
+                            <a href="/tags/diffusion-model/">
+                                <span class="chip bg-color">diffusion model</span>
+                            </a>
+                        
+                            <a href="/tags/diffusers/">
+                                <span class="chip bg-color">diffusers</span>
+                            </a>
+                        
+                            <a href="/tags/pipeline/">
+                                <span class="chip bg-color">pipeline</span>
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+                <div class="col s5 right-align">
+                    
+                    <div class="post-cate">
+                        <i class="fas fa-bookmark fa-fw icon-category"></i>
+                        
+                            <a href="/categories/Python/" class="post-category">
+                                Python
+                            </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+
+            <div class="post-info">
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-minus fa-fw"></i>发布日期:&nbsp;&nbsp;
+                    2025-11-13
+                </div>
+                
+
+                
+                <div class="post-date info-break-policy">
+                    <i class="far fa-calendar-check fa-fw"></i>更新日期:&nbsp;&nbsp;
+                    2025-11-13
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-file-word fa-fw"></i>文章字数:&nbsp;&nbsp;
+                    7.9k
+                </div>
+                
+
+                
+                <div class="info-break-policy">
+                    <i class="far fa-clock fa-fw"></i>阅读时长:&nbsp;&nbsp;
+                    34 分
+                </div>
+                
+
+                
+                    <div id="busuanzi_container_page_pv" class="info-break-policy">
+                        <i class="far fa-eye fa-fw"></i>阅读次数:&nbsp;&nbsp;
+                        <span id="busuanzi_value_page_pv"></span>
+                    </div>
+				
+            </div>
+        </div>
+        <hr class="clearfix">
+
+        
+        <!-- 是否加载使用自带的 prismjs. -->
+        <link rel="stylesheet" href="/libs/prism/prism.min.css">
+        
+
+        
+
+        <div class="card-content article-card-content">
+            <div id="articleContent">
+                <p>diffusers的核心是模型和调度器，diffusionPipeline也可以把这些组件捆绑在一起方便查看，在 diffusers 库中，Pipeline 封装了从模型加载、噪声调度到最终采样生成图像的整个流程。这篇文章主要参考diffusers库的官方文档，但是推理加速等一些相关部分尚未进行总结。</p>
+<hr>
+<h2 id="解构基本的管道"><a href="#解构基本的管道" class="headerlink" title="解构基本的管道"></a>解构基本的管道</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import DDPMPipeline
+ddpm&#x3D;DDPMPipeline.from_pretained(&quot;google&#x2F;ddpm-cat-256&quot;,use_safetensors&#x3D;True)
+image&#x3D;ddpm(num_inference_steps&#x3D;25).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>管道包含一个 [<code>UNet2DModel</code>] 模型和一个 [<code>DDPMScheduler</code>]。管道通过将所需输出大小的随机噪声多次传递给模型来对图像进行去噪。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import DDPMScheduler, UNet2DModel
+import torch
+# 拆开分别加载模型和调度器
+schduler&#x3D;DDPMScheduler.from_pretained(&quot;google&#x2F;ddpm--cat-256&quot;)
+model&#x3D;UNet2DModel.from_pretained(&quot;google&#x2F;ddpm-cat&#x3D;256&quot;,use_safetensors&#x3D;True).to(&quot;cuda&quot;)
+# 设置时间步长，去噪过程将从最大的时间步开始，一直进行到最小的时间步（最清晰的图像）。
+scheduler.set_timesteps(50)
+scheduler.timesteps
+tensor([980, 960, 940, 920, 900, ..., 60, 40, 20, 0]) 
+# 扩散模型的起点是纯随机噪声
+sample_size&#x3D;model.config.sample_size
+noise&#x3D;torch.randn((1,3,sample_size,sample_size),device&#x3D;&quot;cuda&quot;)
+# 1x3x256x256
+
+input&#x3D;noise
+
+for t in scheduler.timesteps:
+    # 这是 U-Net 的核心工作。 将当前的带噪图像 input和当前时间步 t 传递给 U-Net 模型。模型预测并返回它认为的添加在图像上的噪声 noisy_residual
+    with torch.no_grad():
+        noisy_residual&#x3D;model(input,t).sample
+    # 这是调度器的核心工作，接受当前图像，时间步，以及应当添加的噪声来推算这一步加噪前的图像
+    previous_noisy_sample&#x3D;scheduler.step(noisy_residual,t,input).prev_sample
+    # 把加噪前的图像迭代处理
+    input&#x3D;previous_noisy_sample<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"># 将 PyTorch 张量转换成可在屏幕上显示的图像格式
+&gt;&gt;&gt; from PIL import Image
+&gt;&gt;&gt; import numpy as np
+&gt;&gt;&gt; image &#x3D; (input &#x2F; 2 + 0.5).clamp(0, 1).squeeze()
+&gt;&gt;&gt; image &#x3D; (image.permute(1, 2, 0) * 255).round().to(torch.uint8).cpu().numpy()
+&gt;&gt;&gt; image &#x3D; Image.fromarray(image)
+&gt;&gt;&gt; image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="Stable-Diffusion"><a href="#Stable-Diffusion" class="headerlink" title="Stable Diffusion"></a>Stable Diffusion</h2><pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; from PIL import Image
+&gt;&gt;&gt; import torch
+# embedding和tokenization
+&gt;&gt;&gt; from transformers import CLIPTextModel, CLIPTokenizer
+&gt;&gt;&gt; from diffusers import AutoencoderKL, UNet2DConditionModel, PNDMScheduler<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>Stable Diffusion (SD) 模型是由以下四个关键子模块组成</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; vae &#x3D; AutoencoderKL.from_pretrained(&quot;CompVis&#x2F;stable-diffusion-v1-4&quot;, subfolder&#x3D;&quot;vae&quot;, use_safetensors&#x3D;True)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><p><strong>组件:</strong> <code>AutoencoderKL</code> (VAE变分自编码器)</p>
+</li>
+<li><p><strong>作用:</strong></p>
+<ol>
+<li><p><strong>编码 (Encode):</strong> 将高分辨率的图像（例如 512x512 像素空间）压缩到一个更小的、信息量更丰富的 <strong>潜在空间 (Latent Space)</strong>（例如 64x64 潜在张量）。</p>
+</li>
+<li><p><strong>解码 (Decode):</strong> 将去噪后的潜在张量（64x64）<strong>放大</strong>并转换回最终的像素图像（512x512）。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>在流程中的位置:</strong> VAE 在整个生成流程中只运行两次：<strong>开始时</strong>（如果有初始图像）和<strong>结束时</strong>（将最终的潜在结果转换为可见图像）</p>
+</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; tokenizer &#x3D; CLIPTokenizer.from_pretrained(&quot;CompVis&#x2F;stable-diffusion-v1-4&quot;, subfolder&#x3D;&quot;tokenizer&quot;)
+&gt;&gt;&gt; text_encoder &#x3D; CLIPTextModel.from_pretrained(
+...     &quot;CompVis&#x2F;stable-diffusion-v1-4&quot;, subfolder&#x3D;&quot;text_encoder&quot;, use_safetensors&#x3D;True
+... )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><p><strong>组件:</strong> <code>CLIPTokenizer</code> 和 <code>CLIPTextModel</code>（文本处理）</p>
+</li>
+<li><p><strong>作用:</strong> 负责处理和理解<strong>提示词 (Prompt)</strong>。</p>
+<ol>
+<li><p><strong><code>tokenizer</code>:</strong> 将输入的文本字符串进行分词操作。</p>
+</li>
+<li><p><strong><code>text_encoder</code>:</strong> 基于这些 ID，将提示词转换为一个 <strong>文本嵌入向量</strong>。</p>
+</li>
+</ol>
+</li>
+<li><p><strong>在流程中的位置:</strong> 文本编码器在整个流程中只运行 <strong>一次</strong>，生成的文本嵌入向量用于 <strong>“条件化”</strong> U-Net 模型。</p>
+</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; unet &#x3D; UNet2DConditionModel.from_pretrained(
+...     &quot;CompVis&#x2F;stable-diffusion-v1-4&quot;, subfolder&#x3D;&quot;unet&quot;, use_safetensors&#x3D;True
+... )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><p><strong>组件:</strong> <code>UNet2DConditionModel</code> (U-Net核心去噪网络)</p>
+</li>
+<li><p><strong>作用:</strong> <strong>扩散模型的灵魂。</strong> 它的工作和 DDPM 中的 U-Net 类似，都是在每个时间步预测噪声残差。</p>
+</li>
+<li><p><strong>关键区别 (Conditional):</strong> 它是一个 <strong>条件化的</strong> U-Net。这意味着它不仅接收带噪的潜在张量和时间步 $t$，<strong>还接收来自 CLIP 的文本嵌入向量</strong>，从而确保去噪过程是 <strong>根据用户提供的文本描述</strong> 进行引导的。</p>
+</li>
+<li><p><strong>在流程中的位置:</strong> U-Net 是在去噪循环中被 <strong>反复调用</strong> 的核心计算部分。</p>
+</li>
+</ul>
+<p>将默认的 <code>PNDMScheduler</code> 替换为更先进的 <code>UniPCMultistepScheduler</code></p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; from diffusers import UniPCMultistepScheduler
+&gt;&gt;&gt; scheduler &#x3D; UniPCMultistepScheduler.from_pretrained(&quot;CompVis&#x2F;stable-diffusion-v1-4&quot;, subfolder&#x3D;&quot;scheduler&quot;)
+&gt;&gt;&gt; torch_device &#x3D; &quot;cuda&quot;
+&gt;&gt;&gt; vae.to(torch_device)
+&gt;&gt;&gt; text_encoder.to(torch_device)
+&gt;&gt;&gt; unet.to(torch_device))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>创建文本嵌入和生成参数设置,这一步是为了将用户可读的文本提示词，转化为 UNet 在去噪循环中所需的Text Embeddings。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; prompt &#x3D; [&quot;a photograph of an astronaut riding a horse&quot;]
+&gt;&gt;&gt; height &#x3D; 512
+&gt;&gt;&gt; width &#x3D; 512
+&gt;&gt;&gt; num_inference_steps &#x3D; 25
+&gt;&gt;&gt; guidance_scale &#x3D; 7.5
+&gt;&gt;&gt; generator &#x3D; torch.manual_seed(0)
+&gt;&gt;&gt; batch_size &#x3D; len(prompt)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>标记化文本并从提示生成嵌入</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; text_input &#x3D; tokenizer(
+...     prompt, padding&#x3D;&quot;max_length&quot;, max_length&#x3D;tokenizer.model_max_length, truncation&#x3D;True, return_tensors&#x3D;&quot;pt&quot;
+... )
+
+&gt;&gt;&gt; with torch.no_grad():
+...     text_embeddings &#x3D; text_encoder(text_input.input_ids.to(torch_device))[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>为了实现 CFG，我们需要一种“<strong>无条件</strong>”的预测，即模型在没有任何提示词指导下的预测。它们是填充标记的嵌入，通过将空字符串 <code>[&quot;&quot;]</code> 传入分词器和文本编码器来生成。这些嵌入表示了“<strong>随机噪声</strong>”或“<strong>任何东西</strong>”的概念，最后把有条件和无条件连接到一个批次中</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; max_length &#x3D; text_input.input_ids.shape[-1]
+&gt;&gt;&gt; uncond_input &#x3D; tokenizer([&quot;&quot;] * batch_size, padding&#x3D;&quot;max_length&quot;, max_length&#x3D;max_length, return_tensors&#x3D;&quot;pt&quot;)
+&gt;&gt;&gt; uncond_embeddings &#x3D; text_encoder(uncond_input.input_ids.to(torch_device))[0]
+&gt;&gt;&gt; text_embeddings &#x3D; torch.cat([uncond_embeddings, text_embeddings])<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>接下来，生成一些初始随机噪声作为扩散过程的起点。这是图像的潜在表示，它将逐渐去噪。此时，<code>latent</code> 图像比最终图像尺寸小，但这没关系，因为模型稍后会将其转换为最终的 512x512 图像尺寸。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; latents &#x3D; torch.randn(
+...     (batch_size, unet.config.in_channels, height &#x2F;&#x2F; 8, width &#x2F;&#x2F; 8),
+...     generator&#x3D;generator,
+...     device&#x3D;torch_device,
+.. )<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>接下来对图像进行去噪，首先使用初始噪声分布 _sigma_（噪声尺度值）对输入进行缩放，这是改进的调度器（如 [<code>UniPCMultistepScheduler</code>]）所必需的</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; latents &#x3D; latents * scheduler.init_noise_sigma<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<p>最后一步是创建去噪循环，它将逐步将 <code>latents</code> 中的纯噪声转换为你的提示描述的图像。去噪循环需要做三件事：</p>
+<ol>
+<li><p>设置去噪过程中使用的调度器的步长。</p>
+</li>
+<li><p>迭代步长。</p>
+</li>
+<li><p>在每个步长，调用 UNet 模型来预测噪声残差，并将其传递给调度器以计算之前的噪声样本。</p>
+</li>
+</ol>
+<ul>
+<li><p><strong><code>torch.cat([latents] * 2)</code></strong>: 将当前的潜在张量 <code>latents</code> 沿批次维度复制两次（匹配合并后的文本嵌入），准备进行一次双重前向传播。</p>
+</li>
+<li><p><strong><code>scheduler.scale_model_input(...)</code></strong>: 调度器根据当前时间步 $t$ 对输入进行必要的缩放，这是某些先进采样器的要求。</p>
+</li>
+<li><p><strong>UNet 前向传播</strong>: 将（复制后的）带噪潜在张量、当前时间步 $t$ 和合并后的<strong>文本嵌入</strong>（作为条件）传入 UNet。</p>
+</li>
+<li><p><strong><code>noise_pred</code></strong>: UNet 返回预测的噪声残差 $\epsilon$。因为输入是双重的，输出的 <code>noise_pred</code> 也包含两部分：$\epsilon_{uncond}$ 和 $\epsilon_{cond}$</p>
+</li>
+<li><p><strong><code>chunk(2)</code></strong>: 将 UNet 的输出（噪声预测）分割回 <strong>无条件预测</strong> ($\epsilon_{uncond}$) 和 <strong>条件预测</strong> ($\epsilon_{cond}$) 两个部分。</p>
+</li>
+<li><p><strong>CFG 核心公式</strong>: 结合 $\epsilon_{uncond}$ 和 $\epsilon_{cond}$，并使用 <code>guidance_scale</code> (7.5) 加权，得到最终用于去噪的预测噪声 $\epsilon_{final}$。这确保了去噪方向倾向于文本提示。</p>
+</li>
+</ul>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">&gt;&gt;&gt; from tqdm.auto import tqdm
+
+&gt;&gt;&gt; scheduler.set_timesteps(num_inference_steps)
+
+&gt;&gt;&gt; for t in tqdm(scheduler.timesteps):
+...     # expand the latents if we are doing classifier-free guidance to avoid doing two forward passes.
+...     latent_model_input &#x3D; torch.cat([latents] * 2)
+
+...     latent_model_input &#x3D; scheduler.scale_model_input(latent_model_input, timestep&#x3D;t)
+
+...     # predict the noise residual
+...     with torch.no_grad():
+...         noise_pred &#x3D; unet(latent_model_input, t, encoder_hidden_states&#x3D;text_embeddings).sample
+
+...     # perform guidance
+...     noise_pred_uncond, noise_pred_text &#x3D; noise_pred.chunk(2)
+...     noise_pred &#x3D; noise_pred_uncond + guidance_scale * (noise_pred_text - noise_pred_uncond)
+
+...     # compute the previous noisy sample x_t -&gt; x_t-1
+...     latents &#x3D; scheduler.step(noise_pred, t, latents).prev_sample<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>最后一步是使用 <code>vae</code> 将潜在表示解码为图像，并使用 <code>sample</code> 获取解码后的输出，随后对图像进行反归一化等一系列操作：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"># scale and decode the image latents with vae
+latents &#x3D; 1 &#x2F; 0.18215 * latents
+with torch.no_grad():
+    image &#x3D; vae.decode(latents).sample
+&gt;&gt;&gt; image &#x3D; (image &#x2F; 2 + 0.5).clamp(0, 1).squeeze()
+&gt;&gt;&gt; image &#x3D; (image.permute(1, 2, 0) * 255).to(torch.uint8).cpu().numpy()
+&gt;&gt;&gt; image &#x3D; Image.fromarray(image)
+&gt;&gt;&gt; image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="AutoPipeline"><a href="#AutoPipeline" class="headerlink" title="AutoPipeline"></a>AutoPipeline</h2><p>[<code>AutoPipeline</code>]类旨在简化 Diffusers 中的多种管道。它是一个通用的 _任务优先_ 管道，让你可以专注于任务（如 [<code>AutoPipelineForText2Image</code>]、[<code>AutoPipelineForImage2Image</code>] 和 [<code>AutoPipelineForInpainting</code>]），而无需知道具体的管道类。[<code>AutoPipeline</code>] 会自动检测要使用的正确管道类</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>AutoPipeline 类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文本 → 图像</td>
+<td><code>AutoPipelineForText2Image</code></td>
+</tr>
+<tr>
+<td>图像 → 图像</td>
+<td><code>AutoPipelineForImage2Image</code></td>
+</tr>
+<tr>
+<td>图像修复（Inpainting）</td>
+<td><code>AutoPipelineForInpainting</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<blockquote>
+<p> 底层自动映射到 <code>StableDiffusionPipeline</code>、<code>StableDiffusionImg2ImgPipeline</code> 等具体实现</p>
+</blockquote>
+<h3 id="T2I"><a href="#T2I" class="headerlink" title="T2I"></a>T2I</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForText2Image
+import torch
+
+# 自动识别为 StableDiffusionPipeline
+pipe_txt2img &#x3D; AutoPipelineForText2Image.from_pretrained(
+    &quot;dreamlike-art&#x2F;dreamlike-photoreal-2.0&quot;,
+    torch_dtype&#x3D;torch.float16,      # 使用半精度减少显存占用
+    use_safetensors&#x3D;True            # 安全加载 .safetensors 格式权重
+).to(&quot;cuda&quot;)
+
+prompt &#x3D; &quot;cinematic photo of Godzilla eating sushi with a cat in a izakaya, 35mm photograph, film, professional, 4k, highly detailed&quot;
+generator &#x3D; torch.Generator(device&#x3D;&quot;cpu&quot;).manual_seed(37)  # 固定随机种子确保可复现
+
+image &#x3D; pipe_txt2img(prompt, generator&#x3D;generator).images[0]
+image  # 在 Jupyter&#x2F;VS Code 中自动显示<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="I2I"><a href="#I2I" class="headerlink" title="I2I"></a>I2I</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForImage2Image
+from diffusers.utils import load_image
+import torch
+
+# 方法一：重新加载（不推荐，浪费显存）
+# pipe_img2img &#x3D; AutoPipelineForImage2Image.from_pretrained(...)
+
+# 方法二：复用已有管道，节省显存
+pipe_img2img &#x3D; AutoPipelineForImage2Image.from_pipe(pipe_txt2img).to(&quot;cuda&quot;)
+
+init_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;datasets&#x2F;huggingface&#x2F;documentation-images&#x2F;resolve&#x2F;main&#x2F;diffusers&#x2F;autopipeline-text2img.png&quot;)
+prompt &#x3D; &quot;cinematic photo of Godzilla eating burgers with a cat in a fast food restaurant, 35mm photograph, film, professional, 4k, highly detailed&quot;
+generator &#x3D; torch.Generator(device&#x3D;&quot;cpu&quot;).manual_seed(53)
+
+# strength: 控制保留原图的程度（0&#x3D;完全重绘，1&#x3D;几乎不变）
+image &#x3D; pipe_img2img(prompt, image&#x3D;init_image, strength&#x3D;0.75, generator&#x3D;generator).images[0]
+image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Inpainting"><a href="#Inpainting" class="headerlink" title="Inpainting"></a>Inpainting</h3><pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForInpainting
+from diffusers.utils import load_image
+import torch
+
+# 注意：此处使用 SDXL 模型（支持 inpainting）
+pipeline &#x3D; AutoPipelineForInpainting.from_pretrained(
+    &quot;stabilityai&#x2F;stable-diffusion-xl-base-1.0&quot;,
+    torch_dtype&#x3D;torch.float16,
+    use_safetensors&#x3D;True
+).to(&quot;cuda&quot;)
+
+init_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;datasets&#x2F;huggingface&#x2F;documentation-images&#x2F;resolve&#x2F;main&#x2F;diffusers&#x2F;autopipeline-img2img.png&quot;)
+mask_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;datasets&#x2F;huggingface&#x2F;documentation-images&#x2F;resolve&#x2F;main&#x2F;diffusers&#x2F;autopipeline-mask.png&quot;)  # 白色区域将被重绘
+
+prompt &#x3D; &quot;cinematic photo of a owl, 35mm photograph, film, professional, 4k, highly detailed&quot;
+generator &#x3D; torch.Generator(device&#x3D;&quot;cpu&quot;).manual_seed(38)
+
+image &#x3D; pipeline(
+    prompt,
+    image&#x3D;init_image,
+    mask_image&#x3D;mask_image,
+    generator&#x3D;generator,
+    strength&#x3D;0.4  # 去噪强度，值越小越接近原图
+).images[0]
+image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h2 id="加载管道和适配器"><a href="#加载管道和适配器" class="headerlink" title="加载管道和适配器"></a>加载管道和适配器</h2><h3 id="管道"><a href="#管道" class="headerlink" title="管道"></a>管道</h3><p>不同的任务（如文生图、图生图、深度引导生成等）需要不同的输入、处理逻辑和调度策略，因此 <code>diffusers</code> 为每种任务定义了<strong>特定的 Pipeline 类</strong></p>
+<p>可以使用通用的DiffusionPipeline</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import DiffusionPipeline
+pipeline &#x3D; DiffusionPipeline.from_pretrained(&quot;stable-diffusion-v1-5&#x2F;stable-diffusion-v1-5&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>DiffusionPipeline是一个工厂类，调用时会</p>
+<ol>
+<li>自动下载模型仓库（如 <code>stable-diffusion-v1-5</code>）中的配置文件（通常是 <code>model_index.json</code>）。</li>
+<li>解析该文件，识别出这个检查点最适合的默认管道类型（比如 <code>StableDiffusionPipeline</code>）。</li>
+<li>动态加载对应的特定管道类，并返回其实例。</li>
+</ol>
+<p>也可以针对不同任务使用专门的Pipeline以避免歧义等问题</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import StableDiffusionPipeline
+pipeline &#x3D; StableDiffusionPipeline.from_pretrained(&quot;runwayml&#x2F;stable-diffusion-v1-5&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>同一个模型检查点（如 SD 1.5）可以用于多种任务，但需要<strong>加载对应任务的管道类</strong>：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>任务</th>
+<th>对应的 Pipeline 类</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>文生图（Text-to-Image）</td>
+<td><code>StableDiffusionPipeline</code></td>
+</tr>
+<tr>
+<td>图生图（Image-to-Image）</td>
+<td><code>StableDiffusionImg2ImgPipeline</code></td>
+</tr>
+<tr>
+<td>深度引导生成</td>
+<td><code>StableDiffusionDepth2ImgPipeline</code></td>
+</tr>
+<tr>
+<td>图片补全（Inpainting）</td>
+<td><code>StableDiffusionInpaintPipeline</code></td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>除此之外，huggingface中还提供社区pipeline，由开发者社区制作，通常</p>
+<ul>
+<li>扩展了原始模型的能力（如支持 ControlNet、长提示、视频生成等）；</li>
+<li>引入新功能（如深度估计、高清修复、多模态对齐）；</li>
+<li>使用相同的底层模型权重，但通过<strong>自定义代码逻辑</strong>实现新任务。</li>
+</ul>
+<p>例如文档中提到<a target="_blank" rel="noopener" href="https://marigoldmonodepth.github.io/">Marigold</a> 是一个深度估计扩散管道，它利用了扩散模型中丰富的现有和内在视觉知识。它接收输入图像并对其进行去噪和解码，生成深度图。即使对于之前未见过的图像，Marigold 也能表现出色。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">import torch
+from PIL import Image
+from diffusers import DiffusionPipeline
+from diffusers.utils import load_image
+
+pipeline &#x3D; DiffusionPipeline.from_pretrained(
+    &quot;prs-eth&#x2F;marigold-lcm-v1-0&quot;,
+    custom_pipeline&#x3D;&quot;marigold_depth_estimation&quot;,
+    torch_dtype&#x3D;torch.float16,
+    variant&#x3D;&quot;fp16&quot;,
+)
+
+pipeline.to(&quot;cuda&quot;)
+image &#x3D; load_image(&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;datasets&#x2F;huggingface&#x2F;documentation-images&#x2F;resolve&#x2F;main&#x2F;diffusers&#x2F;community-marigold.png&quot;)
+output &#x3D; pipeline(
+    image,
+    denoising_steps&#x3D;4,
+    ensemble_size&#x3D;5,
+    processing_res&#x3D;768,
+    match_input_res&#x3D;True,
+    batch_size&#x3D;0,
+    seed&#x3D;33,
+    color_map&#x3D;&quot;Spectral&quot;,
+    show_progress_bar&#x3D;True,
+)
+depth_colored: Image.Image &#x3D; output.depth_colored
+depth_colored.save(&quot;.&#x2F;depth_colored.png&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="调度器和模型"><a href="#调度器和模型" class="headerlink" title="调度器和模型"></a>调度器和模型</h3><p>首先，我们需要了解<code>DiffusionPipeline</code>的本质</p>
+<p><code>DiffusionPipeline</code> 并不是一个单一模型，而是一个<strong>模块化推理流水线</strong>，由以下组件组成：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>组件</th>
+<th>是否可训练？</th>
+<th>是否可替换？</th>
+<th>说明</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>Text Encoder</strong></td>
+<td>否（冻结）</td>
+<td>是</td>
+<td>如 CLIP/T5，用于编码 prompt</td>
+</tr>
+<tr>
+<td><strong>Tokenizer</strong></td>
+<td>否</td>
+<td>是</td>
+<td>与 Text Encoder 配套</td>
+</tr>
+<tr>
+<td><strong>UNet / Transformer</strong></td>
+<td>是（但通常冻结）</td>
+<td>是</td>
+<td>核心去噪网络</td>
+</tr>
+<tr>
+<td><strong>VAE</strong></td>
+<td>是（但通常冻结）</td>
+<td>是</td>
+<td>潜在空间 ↔ 图像空间转换</td>
+</tr>
+<tr>
+<td><strong>Scheduler</strong></td>
+<td>否</td>
+<td>Absolutely Yes</td>
+<td><strong>完全无参数</strong>，纯算法逻辑</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>可以看出</p>
+<ul>
+<li><strong>调度器不包含任何可学习参数</strong>，它只是一个“噪声调度 + 去噪算法”的实现。</li>
+<li>因此，<strong>同一个 UNet 可以配合任意兼容的调度器使用</strong>，只要它们对 timestep 的定义一致</li>
+</ul>
+<h3 id="Scheduler"><a href="#Scheduler" class="headerlink" title="Scheduler"></a>Scheduler</h3><p>调度器控制有：</p>
+<ul>
+<li><strong>加噪过程</strong>：如何从干净图像生成带噪潜在表示（训练时）；</li>
+<li><strong>去噪过程</strong>：如何从纯噪声逐步还原出图像（推理时）；</li>
+<li><strong>timestep 的映射</strong>：比如 1000 步 → 实际采样 20~50 步；</li>
+<li><strong>采样算法</strong>：如 Euler、DDIM、DPM-Solver 等。</li>
+</ul>
+<p>可以通过下面的方法加载scheduler</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import DDIMScheduler
+
+# 从模型仓库的 scheduler&#x2F; 子文件夹加载
+ddim &#x3D; DDIMScheduler.from_pretrained(
+    &quot;runwayml&#x2F;stable-diffusion-v1-5&quot;,
+    subfolder&#x3D;&quot;scheduler&quot;  # 指向仓库中的 scheduler&#x2F;config.json
+)
+# 然后把ddim作为调度器传递给自己的管道
+pipeline &#x3D; DiffusionPipeline.from_pretrained(
+    &quot;stable-diffusion-v1-5&#x2F;stable-diffusion-v1-5&quot;, scheduler&#x3D;ddim, torch_dtype&#x3D;torch.float16, use_safetensors&#x3D;True).to(&quot;cuda&quot;)
+# 也可以用现有调度器的 config 初始化新调度器
+# 复用当前 pipeline 的调度器配置（保证 timestep 兼容）
+pipeline.scheduler &#x3D; EulerDiscreteScheduler.from_config(pipeline.scheduler.config)
+
+
+# 可以compatibles来查看兼容的scheduler
+print(pipeline.scheduler.compatibles)
+# 输出：[&lt;class &#39;diffusers.schedulers.scheduling_ddim.DDIMScheduler&#39;&gt;, ...]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="Model"><a href="#Model" class="headerlink" title="Model"></a>Model</h3><p>在 Stable Diffusion 中，主要模型包括：</p>
+<ul>
+<li><code>UNet2DConditionModel</code>：条件去噪 U-Net（核心）</li>
+<li><code>AutoencoderKL</code>：VAE 编码器/解码器</li>
+<li><code>CLIPTextModel</code>：文本编码器（来自 Transformers）</li>
+</ul>
+<p>可以从subfolder加载模型权重</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import UNet2DConditionModel
+
+unet &#x3D; UNet2DConditionModel.from_pretrained(
+    &quot;runwayml&#x2F;stable-diffusion-v1-5&quot;,
+    subfolder&#x3D;&quot;unet&quot;,          # 指向 unet&#x2F; 目录
+    use_safetensors&#x3D;True,
+    variant&#x3D;&quot;fp16&quot;             # 加载 float16 权重（如果存在）
+)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>也可以直接加载独立模型</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import UNet2DModel
+
+unet &#x3D; UNet2DModel.from_pretrained(&quot;google&#x2F;ddpm-cifar10-32&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span></span></code></pre>
+<p>由此可以完全绕过pipeline自主构建</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoencoderKL, UNet2DConditionModel, EulerDiscreteScheduler
+from transformers import CLIPTextModel, CLIPTokenizer
+
+model_id &#x3D; &quot;runwayml&#x2F;stable-diffusion-v1-5&quot;
+
+# 1. 加载组件
+vae &#x3D; AutoencoderKL.from_pretrained(model_id, subfolder&#x3D;&quot;vae&quot;)
+text_encoder &#x3D; CLIPTextModel.from_pretrained(model_id, subfolder&#x3D;&quot;text_encoder&quot;)
+tokenizer &#x3D; CLIPTokenizer.from_pretrained(model_id, subfolder&#x3D;&quot;tokenizer&quot;)
+unet &#x3D; UNet2DConditionModel.from_pretrained(model_id, subfolder&#x3D;&quot;unet&quot;)
+scheduler &#x3D; EulerDiscreteScheduler.from_pretrained(model_id, subfolder&#x3D;&quot;scheduler&quot;)
+
+<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>场景</th>
+<th>推荐做法</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>快速切换调度器</strong></td>
+<td><code>pipeline.scheduler = NewScheduler.from_config(pipeline.scheduler.config)</code></td>
+</tr>
+<tr>
+<td><strong>节省显存</strong></td>
+<td>使用 <code>variant=&quot;fp16&quot;</code> + <code>torch_dtype=torch.float16</code></td>
+</tr>
+<tr>
+<td><strong>复现实验</strong></td>
+<td>固定 <code>generator</code> 种子 + 固定调度器类型和步数</td>
+</tr>
+<tr>
+<td><strong>追求速度</strong></td>
+<td>用 <code>DPMSolverMultistepScheduler</code> 或 <code>UniPCMultistepScheduler</code>（20 步内）</td>
+</tr>
+<tr>
+<td><strong>研究调度器影响</strong></td>
+<td>单独加载不同调度器，保持其他组件不变</td>
+</tr>
+<tr>
+<td><strong>安全加载</strong></td>
+<td>优先使用官方调度器，避免自定义调度器引入 bug</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h2 id="模型文件和布局"><a href="#模型文件和布局" class="headerlink" title="模型文件和布局"></a>模型文件和布局</h2><p>PyTorch 模型权重通常使用 Python 的 <a target="_blank" rel="noopener" href="https://docs.python.org/3/library/pickle.html">pickle</a> 工具保存为 ckpt 或 bin 文件。然而，pickle 不安全，被序列化的文件可能包含恶意代码，这些代码在加载时会被执行。例如</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"># 恶意 .ckpt 文件可能包含类似逻辑
+class MaliciousModel(nn.Module):
+    def __reduce__(self):
+        return (os.system, (&quot;rm -rf &#x2F;&quot;,))<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>而Hugging Face开发的safetensors格式则可以避免这些问题</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th><strong>无代码执行</strong></th>
+<th>仅存储纯张量数据（形状 + dtype + 二进制），无 Python 对象</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>快速加载</strong></td>
+<td>支持内存映射（mmap），无需完整读入内存</td>
+</tr>
+<tr>
+<td><strong>懒加载支持</strong></td>
+<td>分布式训练/推理中只加载所需部分</td>
+</tr>
+<tr>
+<td><strong>头部限制</strong></td>
+<td>防止超大元数据攻击</td>
+</tr>
+<tr>
+<td><strong>跨语言兼容</strong></td>
+<td>Rust/Python/C++ 均可解析</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>在模型布局方面，以stable-diffusion-v1-5为例</p>
+<pre class="line-numbers language-textile" data-language="textile"><code class="language-textile">stable-diffusion-v1-5&#x2F;
+├── unet&#x2F;
+│   ├── diffusion_pytorch_model.safetensors
+│   └── config.json
+├── vae&#x2F;
+│   ├── diffusion_pytorch_model.safetensors
+│   └── config.json
+├── text_encoder&#x2F;
+│   ├── model.safetensors
+│   └── config.json
+└── scheduler&#x2F;
+    └── scheduler_config.json<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<ul>
+<li><strong>模块化</strong>：每个组件独立，便于替换（如换 VAE、换 UNet）；</li>
+<li><strong>节省存储</strong>：多个模型共享相同组件（如 10 个 SDXL 模型共用一个 VAE ≈ 节省 3.5GB）；</li>
+<li><strong>灵活组合</strong>：可用 <code>from_pipe()</code> 重用已有 pipeline 的组件；</li>
+<li><strong>透明配置</strong>：每个 <code>config.json</code> 明确描述模型结构。</li>
+</ul>
+<p>用如下方式加载</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import DiffusionPipeline
+
+pipeline &#x3D; DiffusionPipeline.from_pretrained(
+    &quot;stabilityai&#x2F;stable-diffusion-xl-base-1.0&quot;,
+    use_safetensors&#x3D;True,
+    variant&#x3D;&quot;fp16&quot;
+)
+
+from diffusers import StableDiffusionPipeline
+
+# 从 URL 加载
+pipeline &#x3D; StableDiffusionPipeline.from_single_file(
+    &quot;https:&#x2F;&#x2F;huggingface.co&#x2F;WarriorMama777&#x2F;...&#x2F;AbyssOrangeMix.safetensors&quot;
+)
+
+# 从本地路径加载
+pipeline &#x3D; StableDiffusionPipeline.from_single_file(&quot;.&#x2F;model.safetensors&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="布局与格式转换"><a href="#布局与格式转换" class="headerlink" title="布局与格式转换"></a>布局与格式转换</h3><p>从单文件到多文件夹，可以使用官方脚本</p>
+<pre class="line-numbers language-bash" data-language="bash"><code class="language-bash"># SDXL 示例
+python scripts&#x2F;convert_original_stable_diffusion_to_diffusers.py \
+  --checkpoint_path .&#x2F;sd_xl_base_1.0.safetensors \
+  --dump_path .&#x2F;sd_xl_diffusers_format \
+  --use_safetensors<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>从多文件夹到单文件方便分享部署，可以用</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import StableDiffusionXLPipeline
+
+# 加载多文件夹模型
+pipeline &#x3D; StableDiffusionXLPipeline.from_pretrained(&quot;my-model&#x2F;&quot;)
+
+# 保存为单文件（需额外工具，官方暂未直接支持）
+# 但可通过 &#96;save_pretrained&#96; + 合并脚本实现
+pipeline.save_pretrained(&quot;.&#x2F;diffusers-format&quot;)  # 先保存为标准格式<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="自定义组件与配置"><a href="#自定义组件与配置" class="headerlink" title="自定义组件与配置"></a>自定义组件与配置</h3><p>替换默认组件，如vae</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoencoderKL, DiffusionPipeline
+
+vae &#x3D; AutoencoderKL.from_pretrained(&quot;madebyollin&#x2F;sdxl-vae-fp16-fix&quot;)
+pipeline &#x3D; DiffusionPipeline.from_pretrained(
+    &quot;stabilityai&#x2F;stable-diffusion-xl-base-1.0&quot;,
+    vae&#x3D;vae,  # 替换默认 VAE
+    use_safetensors&#x3D;True
+)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>使用LoRA轻量化适配</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"># LoRA 通常为 .safetensors，通过 load_lora_weights 注入
+pipeline.load_lora_weights(&quot;path&#x2F;to&#x2F;blueprintify.safetensors&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<p>指定config来源避免自动配置错误</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">pipeline &#x3D; StableDiffusionXLPipeline.from_single_file(
+    &quot;custom_model.safetensors&quot;,
+    config&#x3D;&quot;segmind&#x2F;SSD-1B&quot;,  # 使用该 repo 的 config.json
+    original_config&#x3D;&quot;https:&#x2F;&#x2F;raw.githubusercontent.com&#x2F;...&#x2F;sd_xl_base.yaml&quot;
+)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p><strong><code>.safetensors</code> 解决了安全问题，多文件夹布局解决了灵活性问题，而 <code>from_single_file</code> 则架起了与旧生态的桥梁——Diffusers 通过这三者，实现了“安全、灵活、兼容”的统一</strong></p>
+<h3 id="Adapter"><a href="#Adapter" class="headerlink" title="Adapter"></a>Adapter</h3><p>在扩散模型个性化中，“适配器”泛指 <strong>用于修改或扩展基础模型行为的一组额外参数或嵌入</strong>。它们不是完整模型，而是对原始模型的轻量级增强，具有以下特点：</p>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>方法</th>
+<th>文件大小</th>
+<th>修改范围</th>
+<th>是否独立可用</th>
+<th>典型用途</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td><strong>DreamBooth</strong></td>
+<td>几 GB</td>
+<td>整个模型权重</td>
+<td>是</td>
+<td>主题/风格定制（如“herge_style”）</td>
+</tr>
+<tr>
+<td><strong>Textual Inversion</strong></td>
+<td>几 KB</td>
+<td>仅文本嵌入</td>
+<td>否（需基础模型）</td>
+<td>概念注入（如 <code>&lt;gta5-artwork&gt;</code>）</td>
+</tr>
+<tr>
+<td><strong>LoRA</strong></td>
+<td>几十~几百 MB</td>
+<td>部分注意力层权重</td>
+<td>否（需基础模型）</td>
+<td>风格/对象微调，可组合</td>
+</tr>
+<tr>
+<td><strong>IP-Adapter</strong></td>
+<td>~100 MB</td>
+<td>UNet 中的交叉注意力</td>
+<td>否（需基础模型 + 图像）</td>
+<td>图像引导生成</td>
+</tr>
+</tbody>
+</table>
+</div>
+<p>所有这些“适配器”都需要通过 <strong>特定的加载接口</strong> 注入到 Diffusers 的 <code>Pipeline</code> 中。</p>
+<p>例如DeamBooth，本质是一个完整的 Stable Diffusion checkpoint（<code>.safetensors</code> 或 <code>.ckpt</code>），只是针对特定主题微调过。<strong>加载方式</strong>是直接作为模型路径传给 <code>from_pretrained()</code>。但是必须在 prompt 中包含训练时指定的<strong>特殊触发词</strong>（如 <code>&quot;herge_style&quot;</code>）。</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">pipeline &#x3D; AutoPipelineForText2Image.from_pretrained(
+    &quot;sd-dreambooth-library&#x2F;herge-style&quot;, 
+    torch_dtype&#x3D;torch.float16
+).to(&quot;cuda&quot;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span></span></code></pre>
+<p>还有LoRA低秩适配权重</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">pipeline.load_lora_weights(&quot;ostris&#x2F;super-cereal-sdxl-lora&quot;, weight_name&#x3D;&quot;cereal_box_sdxl_v1.safetensors&quot;)
+pipeline(prompt, cross_attention_kwargs&#x3D;&#123;&quot;scale&quot;: 0.7&#125;)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span></span></code></pre>
+<h2 id="生成式任务"><a href="#生成式任务" class="headerlink" title="生成式任务"></a>生成式任务</h2><h3 id="T2I-1"><a href="#T2I-1" class="headerlink" title="T2I"></a>T2I</h3><ul>
+<li>在 <strong>文本到图像任务</strong> 中：<ul>
+<li>输入：一段文本提示（prompt），如 <code>&quot;丛林中的宇航员，冷色调...&quot;</code>。</li>
+<li>初始状态：纯随机噪声（latent space 中的高斯噪声）。</li>
+<li>过程：模型在多个时间步（timesteps）中逐步“去噪”，每一步都受文本提示引导。</li>
+<li>输出：一张符合描述的高质量图像。</li>
+</ul>
+</li>
+<li>这类模型属于 <strong>潜在扩散模型（Latent Diffusion Models, LDM）</strong>，如 Stable Diffusion，它在 <strong>低维潜在空间（latent space）</strong> 中操作，而非直接在像素空间，大幅降低计算成本。</li>
+</ul>
+<p>基本流程可写为</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForText2Image
+import torch
+
+pipeline &#x3D; AutoPipelineForText2Image.from_pretrained(
+    &quot;stable-diffusion-v1-5&#x2F;stable-diffusion-v1-5&quot;, 
+    torch_dtype&#x3D;torch.float16, 
+    variant&#x3D;&quot;fp16&quot;
+).to(&quot;cuda&quot;)
+
+image &#x3D; pipeline(&quot;stained glass of darth vader...&quot;).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>ControlNet 是 <strong>条件控制适配器</strong>，冻结原始扩散模型权重，在其旁路添加可训练层。支持多种条件输入：</p>
+<p>姿势（OpenPose），边缘图（Canny），深度图（Depth），语义分割（Segmentation）等。例如使用pose_image的完整实例：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import ControlNetModel, AutoPipelineForText2Image
+from diffusers.utils import load_image
+import torch
+
+controlnet &#x3D; ControlNetModel.from_pretrained(
+    &quot;lllyasviel&#x2F;control_v11p_sd15_openpose&quot;, torch_dtype&#x3D;torch.float16, variant&#x3D;&quot;fp16&quot;
+).to(&quot;cuda&quot;)
+pose_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;huggingface.co&#x2F;lllyasviel&#x2F;control_v11p_sd15_openpose&#x2F;resolve&#x2F;main&#x2F;images&#x2F;control.png&quot;)
+
+pipeline &#x3D; AutoPipelineForText2Image.from_pretrained(
+    &quot;stable-diffusion-v1-5&#x2F;stable-diffusion-v1-5&quot;, controlnet&#x3D;controlnet, torch_dtype&#x3D;torch.float16, variant&#x3D;&quot;fp16&quot;
+).to(&quot;cuda&quot;)
+generator &#x3D; torch.Generator(&quot;cuda&quot;).manual_seed(31)
+image &#x3D; pipeline(&quot;Astronaut in a jungle, cold color palette, muted colors, detailed, 8k&quot;, image&#x3D;pose_image, generator&#x3D;generator).images[0]
+image<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="管道参数"><a href="#管道参数" class="headerlink" title="管道参数"></a>管道参数</h4><ol>
+<li><strong>height / width</strong></li>
+</ol>
+<ul>
+<li>控制输出图像尺寸（必须是 8 的倍数）。</li>
+<li>示例：<code>height=768, width=512</code> → 竖版图像。</li>
+</ul>
+<ol>
+<li><strong>guidance_scale（分类器无指导尺度）</strong></li>
+</ol>
+<p>较低值赋予模型‘创造力’……较高值迫使模型更紧密遵循提示……过高会产生伪影。</p>
+<ul>
+<li>2.5：创意性强，可能偏离提示。</li>
+<li>7.5：平衡（默认常用值）。</li>
+<li>10.5+：高度忠实，但可能出现过饱和或重复纹理。</li>
+</ul>
+<ol>
+<li><strong>negative_prompt（负面提示）</strong></li>
+</ol>
+<p>引导模型远离你不希望生成的东西……用于提高图像质量，常用有</p>
+<pre class="line-numbers language-textile" data-language="textile"><code class="language-textile">ugly, deformed, disfigured, bad anatomy, blurry, low quality<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ol>
+<li><strong>generator（随机种子控制）</strong></li>
+</ol>
+<ul>
+<li>使用 <code>torch.Generator().manual_seed(31)</code> 实现 <strong>可复现结果</strong>。</li>
+<li>对调试、A/B 测试至关重要。</li>
+</ul>
+<h3 id="I2I-1"><a href="#I2I-1" class="headerlink" title="I2I"></a>I2I</h3><p>图像到图像类似于文本到图像（Text-to-Image），但<strong>除了文本提示（prompt）外，还提供一张初始图像作为生成起点</strong>。</p>
+<ol>
+<li><strong>初始图像编码</strong>：将输入图像通过 VAE（变分自编码器）编码到<strong>潜在空间（latent space）</strong>。</li>
+<li><strong>添加噪声</strong>：根据 <code>strength</code> 参数，在潜在表示上<strong>人为添加一定量的噪声</strong>。</li>
+<li><strong>扩散去噪</strong>：扩散模型接收：<ul>
+<li>文本提示（prompt）</li>
+<li>带噪声的潜在图像<br>→ 预测所加噪声 → 逐步去噪，得到新的潜在图像。</li>
+</ul>
+</li>
+<li><strong>解码输出</strong>：将新潜在图像通过 VAE 解码回像素空间，生成最终图像。</li>
+</ol>
+<p>示例如下：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForImage2Image
+pipeline &#x3D; AutoPipelineForImage2Image.from_pretrained(
+    &quot;kandinsky-community&#x2F;kandinsky-2-2-decoder&quot;, 
+    torch_dtype&#x3D;torch.float16, 
+    use_safetensors&#x3D;True
+)
+pipeline.enable_model_cpu_offload()  # 节省内存
+pipeline.enable_xformers_memory_efficient_attention()  # 加速（可选）
+init_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;...&#x2F;cat.png&quot;)
+prompt &#x3D; &quot;cat wizard, gandalf, ...&quot;
+image &#x3D; pipeline(prompt, image&#x3D;init_image).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h4 id="管道参数-1"><a href="#管道参数-1" class="headerlink" title="管道参数"></a>管道参数</h4><ol>
+<li><code>strength</code>（强度）—— 最重要参数！</li>
+</ol>
+<ul>
+<li><strong>作用</strong>：控制初始图像被“破坏”的程度（即加多少噪声）。</li>
+<li><strong>取值范围</strong>：0.0 ~ 1.0<ul>
+<li><code>strength = 0.0</code> → 完全不变（无意义）</li>
+<li><code>strength = 0.3~0.5</code> → 保留结构，微调风格/细节（推荐）</li>
+<li><code>strength = 1.0</code> → 几乎忽略原图，接近 Text-to-Image</li>
+</ul>
+</li>
+</ul>
+<p>实际去噪步数 = <code>int(num_inference_steps * strength)</code></p>
+<ol>
+<li><code>guidance_scale</code>（引导尺度）</li>
+</ol>
+<ul>
+<li><p>控制模型对 prompt 的遵循程度。</p>
+<ul>
+<li><strong>低值（如 1~3）</strong>：更自由，可能偏离提示。</li>
+<li><strong>高值（如 7~12）</strong>：更贴合提示，但可能过饱和或失真。</li>
+</ul>
+</li>
+<li><p>默认通常为 7.5。</p>
+</li>
+</ul>
+<ol>
+<li><code>negative_prompt</code>（负面提示）</li>
+</ol>
+<ul>
+<li><p>明确告诉模型<strong>不要什么</strong>，如：<br>Python<br>编辑</p>
+<pre class="line-numbers language-textile" data-language="textile"><code class="language-textile">negative_prompt &#x3D; &quot;ugly, blurry, deformed&quot;<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>可显著提升图像质量或排除干扰元素（如去掉“丛林”背景）。</p>
+</li>
+</ul>
+<h4 id="链式管道"><a href="#链式管道" class="headerlink" title="链式管道"></a>链式管道</h4><p>链式操作需确保各模型使用<strong>相同 VAE</strong>，否则潜在空间不兼容。</p>
+<ol>
+<li>Text-to-Image → Image-to-Image</li>
+</ol>
+<ul>
+<li>先用文本生成图，再以此图为起点进行二次生成。</li>
+<li>适用于<strong>从零开始创作 + 精修</strong>。</li>
+</ul>
+<ol>
+<li>Image-to-Image → Image-to-Image（多阶段风格迁移）</li>
+</ol>
+<ul>
+<li>示例：写实 → 漫画 → 像素风</li>
+<li>关键技巧：使用 <code>output_type=&quot;latent&quot;</code> 保持在潜在空间，<strong>避免多次 VAE 编解码损失细节和增加延迟</strong>。</li>
+</ul>
+<ol>
+<li>Img2Img + 上采样 + 超分辨率</li>
+</ol>
+<ul>
+<li>流程：<br><code>Img2Img（生成）</code> → <code>Latent Upscaler（2倍）</code> → <code>SD x4 Upscaler（4倍）</code></li>
+<li>可输出<strong>2048x2048+ 高清图</strong></li>
+<li>同样建议全程使用 <code>output_type=&quot;latent&quot;</code> 保持效率。</li>
+</ul>
+<h4 id="提示加权"><a href="#提示加权" class="headerlink" title="提示加权"></a>提示加权</h4><ol>
+<li>提示加权（Prompt Weighting）</li>
+</ol>
+<ul>
+<li><p>使用 <code>Compel</code> 库调整 prompt 中不同词的权重：</p>
+<pre class="line-numbers language-textile" data-language="textile"><code class="language-textile">(astronaut:1.3) in a (jungle:0.8)<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+</li>
+<li><p>通过 <code>prompt_embeds</code> 传入嵌入向量，替代原始 prompt。</p>
+</li>
+</ul>
+<ol>
+<li>ControlNet（最强控制手段）</li>
+</ol>
+<ul>
+<li>输入额外的<strong>条件图</strong>（如边缘图、深度图、姿态图等）。</li>
+<li>模型在生成时<strong>严格遵循条件图的空间结构</strong>。</li>
+</ul>
+<p>示例：用深度图控制场景布局 → 生成符合透视关系的新图像。</p>
+<h3 id="Inpainting-1"><a href="#Inpainting-1" class="headerlink" title="Inpainting"></a>Inpainting</h3><p><strong>图像修复</strong>是一种生成式 AI 技术，用于：</p>
+<ul>
+<li><strong>移除图像中的不需要元素</strong>（如水印、人物、瑕疵）</li>
+<li><strong>填补缺失区域</strong>（如老照片破损部分）</li>
+<li><strong>替换特定区域的内容</strong>（如把天空换成星空、把草地换成雪地）</li>
+</ul>
+<p>它通过以下三要素工作：</p>
+<ol>
+<li><strong>原始图像（base image）</strong>：待编辑的输入图像。</li>
+<li><strong>掩码图像（mask image）</strong>：黑白图，<strong>白色 = 要修复的区域</strong>，<strong>黑色 = 保留不变的区域</strong>。</li>
+<li><strong>文本提示（prompt）</strong>：告诉模型“在白色区域画什么”。</li>
+</ol>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import AutoPipelineForInpainting
+import torch
+
+pipeline &#x3D; AutoPipelineForInpainting.from_pretrained(
+    &quot;runwayml&#x2F;stable-diffusion-inpainting&quot;, 
+    torch_dtype&#x3D;torch.float16
+)
+pipeline.enable_model_cpu_offload()  # 节省内存
+pipeline.enable_xformers_memory_efficient_attention()  # 加速（PyTorch &lt; 2.0 时需要）
+from diffusers.utils import load_image
+
+init_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;...&#x2F;inpaint.png&quot;)      # 原图
+mask_image &#x3D; load_image(&quot;https:&#x2F;&#x2F;...&#x2F;inpaint_mask.png&quot;)  # 掩码（白&#x3D;修，黑&#x3D;留）
+prompt &#x3D; &quot;a black cat with glowing eyes, cute, adorable, disney style&quot;
+negative_prompt &#x3D; &quot;blurry, deformed, bad anatomy&quot;
+
+image &#x3D; pipeline(
+    prompt&#x3D;prompt,
+    negative_prompt&#x3D;negative_prompt,
+    image&#x3D;init_image,
+    mask_image&#x3D;mask_image,
+    generator&#x3D;torch.Generator(&quot;cuda&quot;).manual_seed(42)  # 可复现
+).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>用 <code>blur_factor</code> 软化过渡：</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">blurred_mask &#x3D; pipeline.mask_processor.blur(mask_image, blur_factor&#x3D;33)
+<span aria-hidden="true" class="line-numbers-rows"><span></span></span></code></pre>
+<ul>
+<li><code>blur_factor=0</code>：锐利边缘（可能有接缝）</li>
+<li><code>blur_factor=30~50</code>：自然融合（推荐）</li>
+</ul>
+<p>和T2I管道的链接</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python"># Step 1: 生成城堡
+text2img_pipe &#x3D; AutoPipelineForText2Image.from_pretrained(&quot;...&quot;)
+castle &#x3D; text2img_pipe(&quot;elven castle&quot;).images[0]
+
+# Step 2: 修复某区域（如加瀑布）
+inpaint_pipe &#x3D; AutoPipelineForInpainting.from_pretrained(&quot;...&quot;)
+result &#x3D; inpaint_pipe(prompt&#x3D;&quot;waterfall&quot;, image&#x3D;castle, mask_image&#x3D;mask).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>ControlNet可以让修复结果完全遵循原图结构</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from diffusers import ControlNetModel, StableDiffusionControlNetInpaintPipeline
+
+controlnet &#x3D; ControlNetModel.from_pretrained(&quot;lllyasviel&#x2F;control_v11p_sd15_inpaint&quot;)
+pipeline &#x3D; StableDiffusionControlNetInpaintPipeline.from_pretrained(
+    &quot;runwayml&#x2F;stable-diffusion-inpainting&quot;, controlnet&#x3D;controlnet
+)
+
+# 构造 control_image（将掩码区域设为 -1）
+control_image &#x3D; make_inpaint_condition(init_image, mask_image)
+
+image &#x3D; pipeline(
+    prompt&#x3D;&quot;castle&quot;,
+    image&#x3D;init_image,
+    mask_image&#x3D;mask_image,
+    control_image&#x3D;control_image
+).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<h3 id="T2V-amp-I2V"><a href="#T2V-amp-I2V" class="headerlink" title="T2V &amp; I2V"></a>T2V &amp; I2V</h3><p>视频本质上是一系列<strong>按时间顺序排列的图像帧</strong>。因此，生成视频的关键在于：</p>
+<ul>
+<li><strong>保持空间一致性</strong>（每帧看起来真实且细节丰富）</li>
+<li><strong>引入时间连贯性</strong>（帧与帧之间平滑过渡，有合理的运动）</li>
+</ul>
+<p>为此，视频扩散模型通常在原始图像扩散模型的基础上，<strong>增加对时间维度的建模能力</strong>，比如：</p>
+<ul>
+<li>添加 <strong>3D 卷积层</strong>（同时处理空间+时间）</li>
+<li>引入 <strong>时间注意力机制</strong></li>
+<li>使用 <strong>混合数据集</strong>（图像 + 视频）进行训练，使模型既能理解静态图像，也能学习动态变化</li>
+</ul>
+<p>例如</p>
+<h5 id="CogVideoX（较新、强大）"><a href="#CogVideoX（较新、强大）" class="headerlink" title="CogVideoX（较新、强大）"></a><strong>CogVideoX</strong>（较新、强大）</h5><ul>
+<li><strong>架构</strong>：<strong>多维 Transformer</strong>，统一处理 <strong>文本、空间、时间</strong></li>
+<li><strong>关键技术</strong>：<ul>
+<li><strong>3D VAE</strong>：同时压缩空间和时间维度</li>
+<li><strong>全注意力机制</strong> + <strong>专家块（MoE）</strong>：提升对齐能力</li>
+</ul>
+</li>
+<li><strong>版本</strong>：<ul>
+<li><code>CogVideoX-5b-I2V</code>：图像 → 视频</li>
+<li><code>CogVideoX-5b / 2b</code>：文本 → 视频</li>
+</ul>
+</li>
+</ul>
+<h5 id="AnimateDiff"><a href="#AnimateDiff" class="headerlink" title="AnimateDiff"></a><strong>AnimateDiff</strong></h5><ul>
+<li><strong>核心思想</strong>：<strong>适配器（Adapter）架构</strong><ul>
+<li>不重新训练整个模型，而是在 <strong>已有的文生图模型</strong>（如 SDXL）中插入一个轻量级 <strong>运动模块（Motion Module）</strong></li>
+<li>运动模块专门学习“如何让图像动起来”</li>
+</ul>
+</li>
+<li><strong>优势</strong>：<ul>
+<li>可插拔：能与多种文生图模型组合</li>
+<li>训练成本低，社区生态丰富（大量 LoRA + Motion Adapter 组合）</li>
+</ul>
+</li>
+</ul>
+<h4 id="关键参数"><a href="#关键参数" class="headerlink" title="关键参数"></a>关键参数</h4><ol>
+<li><strong><code>num_frames</code>：视频长度</strong></li>
+</ol>
+<ul>
+<li>控制生成多少帧</li>
+<li>示例：<code>num_frames=49</code> → 约 6 秒视频（若 fps=8）</li>
+<li>⚠️ 帧数越多，显存消耗越大</li>
+</ul>
+<ol>
+<li><strong><code>guidance_scale</code>：提示跟随强度</strong></li>
+</ol>
+<ul>
+<li>高值（如 9.0）：严格遵循提示，细节更准确，但可能僵硬</li>
+<li>低值（如 1.0）：更“自由发挥”，可能更自然但偏离提示</li>
+<li>SVD 特殊：用 <code>min_guidance_scale</code> 和 <code>max_guidance_scale</code> 分别控制首尾帧</li>
+</ul>
+<ol>
+<li><strong><code>negative_prompt</code>：排除不良内容</strong></li>
+</ol>
+<ul>
+<li>常用词：<code>&quot;blurry, low resolution, distorted, static&quot;</code></li>
+<li>能显著提升视频质量，避免常见 artifacts</li>
+</ul>
+<ol>
+<li><strong>模型专属参数</strong></li>
+</ol>
+<div class="table-container">
+<table>
+<thead>
+<tr>
+<th>模型</th>
+<th>参数</th>
+<th>作用</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>SVD</td>
+<td><code>motion_bucket_id</code></td>
+<td>控制整体运动幅度（值越大越剧烈）</td>
+</tr>
+<tr>
+<td>SVD</td>
+<td><code>noise_aug_strength</code></td>
+<td>初始图像加噪程度（越高越不像原图，但运动更强）</td>
+</tr>
+<tr>
+<td>Text2Video-Zero</td>
+<td><code>motion_field_strength_x/y</code></td>
+<td>手动控制水平/垂直方向运动强度</td>
+</tr>
+</tbody>
+</table>
+</div>
+<h3 id="关于深度图"><a href="#关于深度图" class="headerlink" title="关于深度图"></a>关于深度图</h3><p><strong>Depth-to-Image（简称 depth2img）</strong> 是 Stable Diffusion 的一种扩展能力，它在传统 <strong>图像到图像（img2img）</strong> 的基础上，<strong>额外利用了场景的深度信息（depth map）</strong> 来引导新图像的生成。</p>
+<ul>
+<li>输入一张室内照片 + 提示 “变成未来科技风格客厅”</li>
+<li>模型会保持房间的透视、家具位置等空间结构不变，但将沙发、墙壁等替换成科幻风格</li>
+</ul>
+<p><strong>深度图</strong> 是一个灰度图像，表示每个像素距离相机的远近（越白越近，越黑越远）</p>
+<ul>
+<li>它编码了场景的 <strong>几何结构</strong>（如前景/背景、物体轮廓、空间层次）</li>
+<li>在生成过程中，模型会 <strong>同时参考</strong>：<ul>
+<li>原始图像（可选）</li>
+<li>深度图（强制保留结构）</li>
+<li>文本提示（决定新内容）</li>
+</ul>
+</li>
+</ul>
+<p>常见代码示例</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">import torch
+from diffusers import StableDiffusionDepth2ImgPipeline
+from diffusers.utils import load_image, make_image_grid
+
+# 1. 加载管道（自动包含深度估计器）
+pipeline &#x3D; StableDiffusionDepth2ImgPipeline.from_pretrained(
+    &quot;stabilityai&#x2F;stable-diffusion-2-depth&quot;,
+    torch_dtype&#x3D;torch.float16,
+    use_safetensors&#x3D;True,
+).to(&quot;cuda&quot;)
+# 2. 准备输入
+url &#x3D; &quot;http:&#x2F;&#x2F;images.cocodataset.org&#x2F;val2017&#x2F;000000039769.jpg&quot;  # 两只猫的照片
+init_image &#x3D; load_image(url)
+
+prompt &#x3D; &quot;two tigers&quot;                    # 把猫变成老虎
+negative_prompt &#x3D; &quot;bad, deformed, ugly, bad anatomy&quot;
+
+# 3. 生成新图像
+image &#x3D; pipeline(
+    prompt&#x3D;prompt,
+    image&#x3D;init_image,                    # 初始图像（用于提取深度）
+    negative_prompt&#x3D;negative_prompt,
+    strength&#x3D;0.7                         # 控制变化程度
+).images[0]
+
+# 4. 可视化对比
+make_image_grid([init_image, image], rows&#x3D;1, cols&#x3D;2)<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+<p>典型应用场景有</p>
+<ol>
+<li><p><strong>风格迁移 + 结构保留</strong></p>
+<ul>
+<li>“把这张老房子变成赛博朋克风格” → 建筑结构不变，材质/灯光改变</li>
+</ul>
+</li>
+<li><p><strong>对象替换</strong></p>
+<ul>
+<li>“把桌上的苹果换成西瓜” → 保持桌面透视和阴影方向</li>
+</ul>
+</li>
+<li><p><strong>季节/天气变换</strong></p>
+<ul>
+<li>“把夏天的公园变成冬天雪景” → 树木位置、路径走向不变</li>
+</ul>
+</li>
+<li><p><strong>概念设计迭代</strong></p>
+<ul>
+<li>设计师提供草图 → AI 生成多种风格版本，但保持构图一致</li>
+</ul>
+</li>
+</ol>
+<p>也可以手动提供深度图</p>
+<pre class="line-numbers language-python" data-language="python"><code class="language-python">from transformers import DPTFeatureExtractor, DPTForDepthEstimation
+import numpy as np
+
+# 使用 MiDaS 或 DPT 手动生成深度图
+depth_estimator &#x3D; DPTForDepthEstimation.from_pretrained(&quot;Intel&#x2F;dpt-hybrid-midas&quot;).to(&quot;cuda&quot;)
+feature_extractor &#x3D; DPTFeatureExtractor.from_pretrained(&quot;Intel&#x2F;dpt-hybrid-midas&quot;)
+
+inputs &#x3D; feature_extractor(images&#x3D;init_image, return_tensors&#x3D;&quot;pt&quot;).to(&quot;cuda&quot;)
+with torch.no_grad():
+    outputs &#x3D; depth_estimator(**inputs)
+    predicted_depth &#x3D; outputs.predicted_depth
+
+# 转换为 PIL 图像并传入 pipeline
+depth_map &#x3D; ...  # 处理 predicted_depth 成 [H, W] tensor 或 PIL Image
+
+image &#x3D; pipeline(prompt&#x3D;prompt, image&#x3D;init_image, depth_map&#x3D;depth_map, ...).images[0]<span aria-hidden="true" class="line-numbers-rows"><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span><span></span></span></code></pre>
+
+                
+            </div>
+            <hr/>
+
+            
+
+    <div class="reprint" id="reprint-statement">
+        
+            <div class="reprint__author">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-user">
+                        文章作者:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="/about" rel="external nofollow noreferrer">Chen Zhou</a>
+                </span>
+            </div>
+            <div class="reprint__type">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-link">
+                        文章链接:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    <a href="https://whuchenzhou.github.io/2025/11/13/diffusers/">https://whuchenzhou.github.io/2025/11/13/diffusers/</a>
+                </span>
+            </div>
+            <div class="reprint__notice">
+                <span class="reprint-meta" style="font-weight: bold;">
+                    <i class="fas fa-copyright">
+                        版权声明:
+                    </i>
+                </span>
+                <span class="reprint-info">
+                    本博客所有文章除特別声明外，均采用
+                    <a href="https://creativecommons.org/licenses/by/4.0/deed.zh" rel="external nofollow noreferrer" target="_blank">CC BY 4.0</a>
+                    许可协议。转载请注明来源
+                    <a href="/about" target="_blank">Chen Zhou</a>
+                    !
+                </span>
+            </div>
+        
+    </div>
+
+    <script async defer>
+      document.addEventListener("copy", function (e) {
+        let toastHTML = '<span>复制成功，请遵循本文的转载规则</span><button class="btn-flat toast-action" onclick="navToReprintStatement()" style="font-size: smaller">查看</a>';
+        M.toast({html: toastHTML})
+      });
+
+      function navToReprintStatement() {
+        $("html, body").animate({scrollTop: $("#reprint-statement").offset().top - 80}, 800);
+      }
+    </script>
+
+
+
+            <div class="tag_share" style="display: block;">
+                <div class="post-meta__tag-list" style="display: inline-block;">
+                    
+                        <div class="article-tag">
+                            
+                                <a href="/tags/diffusion-model/">
+                                    <span class="chip bg-color">diffusion model</span>
+                                </a>
+                            
+                                <a href="/tags/diffusers/">
+                                    <span class="chip bg-color">diffusers</span>
+                                </a>
+                            
+                                <a href="/tags/pipeline/">
+                                    <span class="chip bg-color">pipeline</span>
+                                </a>
+                            
+                        </div>
+                    
+                </div>
+                <div class="post_share" style="zoom: 80%; width: fit-content; display: inline-block; float: right; margin: -0.15rem 0;">
+                    <link rel="stylesheet" type="text/css" href="/libs/share/css/share.min.css">
+<div id="article-share">
+
+    
+    <div class="social-share" data-sites="twitter,facebook,google,qq,qzone,wechat,weibo,douban,linkedin" data-wechat-qrcode-helper="<p>微信扫一扫即可分享！</p>"></div>
+    <script src="/libs/share/js/social-share.min.js"></script>
+    
+
+    
+
+</div>
+
+                </div>
+            </div>
+            
+                <div id="reward">
+    <a href="#rewardModal" class="reward-link modal-trigger btn-floating btn-medium waves-effect waves-light red">赏</a>
+
+    <!-- Modal Structure -->
+    <div id="rewardModal" class="modal">
+        <div class="modal-content">
+            <a class="close modal-close"><i class="fas fa-times"></i></a>
+            <h4 class="reward-title">你的赏识是我前进的动力</h4>
+            <div class="reward-content">
+                <div class="reward-tabs">
+                    <ul class="tabs row">
+                        <li class="tab col s6 alipay-tab waves-effect waves-light"><a href="#alipay">支付宝</a></li>
+                        <li class="tab col s6 wechat-tab waves-effect waves-light"><a href="#wechat">微 信</a></li>
+                    </ul>
+                    <div id="alipay">
+                        <img src="/medias/reward/alipay.jpg" class="reward-img" alt="支付宝打赏二维码">
+                    </div>
+                    <div id="wechat">
+                        <img src="/medias/reward/wechat.png" class="reward-img" alt="微信打赏二维码">
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<script>
+    $(function () {
+        $('.tabs').tabs();
+    });
+</script>
+
+            
+        </div>
+    </div>
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+    
+
+<article id="prenext-posts" class="prev-next articles">
+    <div class="row article-row">
+        
+        <div class="article col s12 m6" data-aos="fade-up" data-aos="fade-up">
+            <div class="article-badge left-badge text-color">
+                <i class="far fa-dot-circle"></i>&nbsp;本篇
+            </div>
+            <div class="card">
+                <a href="/2025/11/13/diffusers/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/3.jpg" class="responsive-img" alt="diffusers">
+                        
+                        <span class="card-title">diffusers</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Python/" class="post-category">
+                                    Python
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/diffusion-model/">
+                        <span class="chip bg-color">diffusion model</span>
+                    </a>
+                    
+                    <a href="/tags/diffusers/">
+                        <span class="chip bg-color">diffusers</span>
+                    </a>
+                    
+                    <a href="/tags/pipeline/">
+                        <span class="chip bg-color">pipeline</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+        
+        <div class="article col s12 m6" data-aos="fade-up">
+            <div class="article-badge right-badge text-color">
+                下一篇&nbsp;<i class="fas fa-chevron-right"></i>
+            </div>
+            <div class="card">
+                <a href="/2025/11/13/Transformer/">
+                    <div class="card-image">
+                        
+                        
+                        <img src="/medias/featureimages/15.jpg" class="responsive-img" alt="Transformer">
+                        
+                        <span class="card-title">Transformer</span>
+                    </div>
+                </a>
+                <div class="card-content article-content">
+                    <div class="summary block-with-text">
+                        
+                            
+                        
+                    </div>
+                    <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-13
+                            </span>
+                        <span class="publish-author">
+                            
+                            <i class="fas fa-bookmark fa-fw icon-category"></i>
+                            
+                            <a href="/categories/Others/" class="post-category">
+                                    Others
+                                </a>
+                            
+                            
+                        </span>
+                    </div>
+                </div>
+                
+                <div class="card-action article-tags">
+                    
+                    <a href="/tags/Transformer/">
+                        <span class="chip bg-color">Transformer</span>
+                    </a>
+                    
+                    <a href="/tags/ViT-DiT/">
+                        <span class="chip bg-color">ViT,DiT</span>
+                    </a>
+                    
+                </div>
+                
+            </div>
+        </div>
+        
+    </div>
+</article>
+
+</div>
+
+
+
+<!-- 代码块功能依赖 -->
+<script type="text/javascript" src="/libs/codeBlock/codeBlockFuction.js"></script>
+
+
+  <!-- 是否加载使用自带的 prismjs. -->
+  <script type="text/javascript" src="/libs/prism/prism.min.js"></script>
+
+
+<!-- 代码语言 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeLang.js"></script>
+
+
+<!-- 代码块复制 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeCopy.js"></script>
+
+
+<!-- 代码块收缩 -->
+
+<script type="text/javascript" src="/libs/codeBlock/codeShrink.js"></script>
+
+
+
+    </div>
+    <div id="toc-aside" class="expanded col l3 hide-on-med-and-down">
+        <div class="toc-widget card" style="background-color: white;">
+            <div class="toc-title"><i class="far fa-list-alt"></i>&nbsp;&nbsp;目录</div>
+            <div id="toc-content"></div>
+        </div>
+    </div>
+</div>
+
+<!-- TOC 悬浮按钮. -->
+
+<div id="floating-toc-btn" class="hide-on-med-and-down">
+    <a class="btn-floating btn-large bg-color">
+        <i class="fas fa-list-ul"></i>
+    </a>
+</div>
+
+
+<script src="/libs/tocbot/tocbot.min.js"></script>
+<script>
+    $(function () {
+        tocbot.init({
+            tocSelector: '#toc-content',
+            contentSelector: '#articleContent',
+            headingsOffset: -($(window).height() * 0.4 - 45),
+            collapseDepth: Number('0'),
+            headingSelector: 'h2, h3, h4'
+        });
+
+        // Set scroll toc fixed.
+        let tocHeight = parseInt($(window).height() * 0.4 - 64);
+        let $tocWidget = $('.toc-widget');
+        $(window).scroll(function () {
+            let scroll = $(window).scrollTop();
+            /* add post toc fixed. */
+            if (scroll > tocHeight) {
+                $tocWidget.addClass('toc-fixed');
+            } else {
+                $tocWidget.removeClass('toc-fixed');
+            }
+        });
+
+        
+        /* 修复文章卡片 div 的宽度. */
+        let fixPostCardWidth = function (srcId, targetId) {
+            let srcDiv = $('#' + srcId);
+            if (srcDiv.length === 0) {
+                return;
+            }
+
+            let w = srcDiv.width();
+            if (w >= 450) {
+                w = w + 21;
+            } else if (w >= 350 && w < 450) {
+                w = w + 18;
+            } else if (w >= 300 && w < 350) {
+                w = w + 16;
+            } else {
+                w = w + 14;
+            }
+            $('#' + targetId).width(w);
+        };
+
+        // 切换TOC目录展开收缩的相关操作.
+        const expandedClass = 'expanded';
+        let $tocAside = $('#toc-aside');
+        let $mainContent = $('#main-content');
+        $('#floating-toc-btn .btn-floating').click(function () {
+            if ($tocAside.hasClass(expandedClass)) {
+                $tocAside.removeClass(expandedClass).hide();
+                $mainContent.removeClass('l9');
+            } else {
+                $tocAside.addClass(expandedClass).show();
+                $mainContent.addClass('l9');
+            }
+            fixPostCardWidth('artDetail', 'prenext-posts');
+        });
+        
+    });
+</script>
+
+    
+
+</main>
+
+
+<script src="https://cdn.bootcss.com/mathjax/2.7.5/MathJax.js?config=TeX-AMS-MML_HTMLorMML"></script>
+<script>
+    MathJax.Hub.Config({
+        tex2jax: {inlineMath: [['$', '$'], ['\\(', '\\)']]}
+    });
+</script>
+
+
+
+    <footer class="page-footer bg-color">
+    
+        <link rel="stylesheet" href="/libs/aplayer/APlayer.min.css">
+<style>
+    .aplayer .aplayer-lrc p {
+        
+        display: none;
+        
+        font-size: 12px;
+        font-weight: 700;
+        line-height: 16px !important;
+    }
+
+    .aplayer .aplayer-lrc p.aplayer-lrc-current {
+        
+        display: none;
+        
+        font-size: 15px;
+        color: #42b983;
+    }
+
+    
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body {
+        left: -66px !important;
+    }
+
+    .aplayer.aplayer-fixed.aplayer-narrow .aplayer-body:hover {
+        left: 0px !important;
+    }
+
+    
+</style>
+<div class="">
+    
+    <div class="row">
+        <meting-js class="col l8 offset-l2 m10 offset-m1 s12"
+                   server="netease"
+                   type="playlist"
+                   id="503838841"
+                   fixed='true'
+                   autoplay='false'
+                   theme='#42b983'
+                   loop='all'
+                   order='random'
+                   preload='auto'
+                   volume='0.7'
+                   list-folded='true'
+        >
+        </meting-js>
+    </div>
+</div>
+
+<script src="/libs/aplayer/APlayer.min.js"></script>
+<script src="/libs/aplayer/Meting.min.js"></script>
+
+    
+
+    <div class="container row center-align"
+         style="margin-bottom: 0px !important;">
+        <div class="col s12 m8 l8 copy-right">
+            Copyright&nbsp;&copy;
+            
+                <span id="year">2025</span>
+            
+            <a href="/about" target="_blank">Chen Zhou</a>
+            |&nbsp;Powered by&nbsp;<a href="https://hexo.io/" target="_blank">Hexo</a>
+            |&nbsp;Theme&nbsp;<a href="https://github.com/blinkfox/hexo-theme-matery" target="_blank">Matery</a>
+            
+            <br>
+            
+                &nbsp;<i class="fas fa-chart-area"></i>&nbsp;站点总字数:&nbsp;<span
+                        class="white-color">40.6k</span>
+            
+            
+            
+                
+            
+            
+                <span id="busuanzi_container_site_pv">
+                &nbsp;|&nbsp;<i class="far fa-eye"></i>&nbsp;总访问量:&nbsp;
+                    <span id="busuanzi_value_site_pv" class="white-color"></span>
+            </span>
+            
+            
+                <span id="busuanzi_container_site_uv">
+                &nbsp;|&nbsp;<i class="fas fa-users"></i>&nbsp;总访问人数:&nbsp;
+                    <span id="busuanzi_value_site_uv" class="white-color"></span>
+            </span>
+            
+            <br>
+
+            <!-- 运行天数提醒. -->
+            
+            <br>
+            
+        </div>
+        <div class="col s12 m4 l4 social-link social-statis">
+    <a href="https://github.com/WhuChenzhou" class="tooltipped" target="_blank" data-tooltip="访问我的GitHub" data-position="top" data-delay="50">
+        <i class="fab fa-github"></i>
+    </a>
+
+
+
+    <a href="mailto:whuchenzhou@qq.com" class="tooltipped" target="_blank" data-tooltip="邮件联系我" data-position="top" data-delay="50">
+        <i class="fas fa-envelope-open"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="tencent://AddContact/?fromId=50&fromSubId=1&subcmd=all&uin=1157979681" class="tooltipped" target="_blank" data-tooltip="QQ联系我: 1157979681" data-position="top" data-delay="50">
+        <i class="fab fa-qq"></i>
+    </a>
+
+
+
+
+
+
+
+    <a href="/atom.xml" class="tooltipped" target="_blank" data-tooltip="RSS 订阅" data-position="top" data-delay="50">
+        <i class="fas fa-rss"></i>
+    </a>
+
+</div>
+    </div>
+</footer>
+
+<div class="progress-bar"></div>
+
+
+    <!-- 搜索遮罩框 -->
+<div id="searchModal" class="modal">
+    <div class="modal-content">
+        <div class="search-header">
+            <span class="title"><i class="fas fa-search"></i>&nbsp;&nbsp;搜索</span>
+            <input type="search" id="searchInput" name="s" placeholder="请输入搜索的关键字"
+                   class="search-input">
+        </div>
+        <div id="searchResult"></div>
+    </div>
+</div>
+
+<script type="text/javascript">
+$(function () {
+    var searchFunc = function (path, search_id, content_id) {
+        'use strict';
+        $.ajax({
+            url: path,
+            dataType: "xml",
+            success: function (xmlResponse) {
+                // get the contents from search data
+                var datas = $("entry", xmlResponse).map(function () {
+                    return {
+                        title: $("title", this).text(),
+                        content: $("content", this).text(),
+                        url: $("url", this).text()
+                    };
+                }).get();
+                var $input = document.getElementById(search_id);
+                var $resultContent = document.getElementById(content_id);
+                $input.addEventListener('input', function () {
+                    var str = '<ul class=\"search-result-list\">';
+                    var keywords = this.value.trim().toLowerCase().split(/[\s\-]+/);
+                    $resultContent.innerHTML = "";
+                    if (this.value.trim().length <= 0) {
+                        return;
+                    }
+                    // perform local searching
+                    datas.forEach(function (data) {
+                        var isMatch = true;
+                        var data_title = data.title.trim().toLowerCase();
+                        var data_content = data.content.trim().replace(/<[^>]+>/g, "").toLowerCase();
+                        var data_url = data.url;
+                        data_url = data_url.indexOf('/') === 0 ? data.url : '/' + data_url;
+                        var index_title = -1;
+                        var index_content = -1;
+                        var first_occur = -1;
+                        // only match artiles with not empty titles and contents
+                        if (data_title !== '' && data_content !== '') {
+                            keywords.forEach(function (keyword, i) {
+                                index_title = data_title.indexOf(keyword);
+                                index_content = data_content.indexOf(keyword);
+                                if (index_title < 0 && index_content < 0) {
+                                    isMatch = false;
+                                } else {
+                                    if (index_content < 0) {
+                                        index_content = 0;
+                                    }
+                                    if (i === 0) {
+                                        first_occur = index_content;
+                                    }
+                                }
+                            });
+                        }
+                        // show search results
+                        if (isMatch) {
+                            str += "<li><a href='" + data_url + "' class='search-result-title'>" + data_title + "</a>";
+                            var content = data.content.trim().replace(/<[^>]+>/g, "");
+                            if (first_occur >= 0) {
+                                // cut out 100 characters
+                                var start = first_occur - 20;
+                                var end = first_occur + 80;
+                                if (start < 0) {
+                                    start = 0;
+                                }
+                                if (start === 0) {
+                                    end = 100;
+                                }
+                                if (end > content.length) {
+                                    end = content.length;
+                                }
+                                var match_content = content.substr(start, end);
+                                // highlight all keywords
+                                keywords.forEach(function (keyword) {
+                                    var regS = new RegExp(keyword, "gi");
+                                    match_content = match_content.replace(regS, "<em class=\"search-keyword\">" + keyword + "</em>");
+                                });
+
+                                str += "<p class=\"search-result\">" + match_content + "...</p>"
+                            }
+                            str += "</li>";
+                        }
+                    });
+                    str += "</ul>";
+                    $resultContent.innerHTML = str;
+                });
+            }
+        });
+    };
+
+    searchFunc('/search.xml', 'searchInput', 'searchResult');
+});
+</script>
+
+    <!-- 白天和黑夜主题 -->
+<div class="stars-con">
+    <div id="stars"></div>
+    <div id="stars2"></div>
+    <div id="stars3"></div>  
+</div>
+
+<script>
+    function switchNightMode() {
+        $('<div class="Cuteen_DarkSky"><div class="Cuteen_DarkPlanet"></div></div>').appendTo($('body')),
+        setTimeout(function () {
+            $('body').hasClass('DarkMode') 
+            ? ($('body').removeClass('DarkMode'), localStorage.setItem('isDark', '0'), $('#sum-moon-icon').removeClass("fa-sun").addClass('fa-moon')) 
+            : ($('body').addClass('DarkMode'), localStorage.setItem('isDark', '1'), $('#sum-moon-icon').addClass("fa-sun").removeClass('fa-moon')),
+            
+            setTimeout(function () {
+            $('.Cuteen_DarkSky').fadeOut(1e3, function () {
+                $(this).remove()
+            })
+            }, 2e3)
+        })
+    }
+</script>
+
+    <!-- 回到顶部按钮 -->
+<div id="backTop" class="top-scroll">
+    <a class="btn-floating btn-large waves-effect waves-light" href="#!">
+        <i class="fas fa-arrow-up"></i>
+    </a>
+</div>
+
+
+    <script src="/libs/materialize/materialize.min.js"></script>
+    <script src="/libs/masonry/masonry.pkgd.min.js"></script>
+    <script src="/libs/aos/aos.js"></script>
+    <script src="/libs/scrollprogress/scrollProgress.min.js"></script>
+    <script src="/libs/lightGallery/js/lightgallery-all.min.js"></script>
+    <script src="/js/matery.js"></script>
+
+    
+
+    
+    
+    
+
+    <!-- 雪花特效 -->
+     
+        <script type="text/javascript">
+            // 只在桌面版网页启用特效
+            var windowWidth = $(window).width();
+            if (windowWidth > 768) {
+                document.write('<script type="text/javascript" src="/libs/others/snow.js"><\/script>');
+            }
+        </script>
+    
+
+    <!-- 鼠标星星特效 -->
+    
+
+     
+        <script src="https://ssl.captcha.qq.com/TCaptcha.js"></script>
+        <script src="/libs/others/TencentCaptcha.js"></script>
+        <button id="TencentCaptcha" data-appid="xxxxxxxxxx" data-cbfn="callback" type="button" hidden></button>
+    
+
+    <!-- Baidu Analytics -->
+
+    <!-- Baidu Push -->
+
+<script>
+    (function () {
+        var bp = document.createElement('script');
+        var curProtocol = window.location.protocol.split(':')[0];
+        if (curProtocol === 'https') {
+            bp.src = 'https://zz.bdstatic.com/linksubmit/push.js';
+        } else {
+            bp.src = 'http://push.zhanzhang.baidu.com/push.js';
+        }
+        var s = document.getElementsByTagName("script")[0];
+        s.parentNode.insertBefore(bp, s);
+    })();
+</script>
+
+    
+    <script src="/libs/others/clicklove.js" async="async"></script>
+    
+    
+    <script async src="/libs/others/busuanzi.pure.mini.js"></script>
+    
+
+    
+
+    
+
+    <!--腾讯兔小巢-->
+    
+    
+
+    
+
+    
+
+    
+    <script src="/libs/instantpage/instantpage.js" type="module"></script>
+    
+
+</body>
+
+</html>
