@@ -4,6 +4,31 @@
   
     
     <entry>
+      <title>使用blender对模型进行渲染</title>
+      <link href="/2025/11/22/blenderRender/"/>
+      <url>/2025/11/22/blenderRender/</url>
+      
+        <content type="html"><![CDATA[<script type="text/javascript" async  src="https://cdn.jsdelivr.net/npm/mathjax@3/es5/tex-mml-chtml.js"></script><p>这是个人整理的关于使用blender对模型进行渲染的文档，目前写到了gltf，glb，ply等，包含自定义轨迹等的用法，除此之外其他的一些模型或用法相关部分尚未进行总结。</p><hr><h3 id="导入和调整模型文件"><a href="#导入和调整模型文件" class="headerlink" title="导入和调整模型文件"></a>导入和调整模型文件</h3><p>首先open一个新项目，删去这里的方块，找一个合适的模型，点击File→import→glb,gltf 这里选用了一个来自Sketchfeb的生锈汽车的glb模型</p><p><img src="/images/blender/blender_img_01.png" alt="1"></p><p>为了方便我们调试可以在右上角打开Material Preview，也就是第一个红框框住的地方</p><p>接着为了让我们正常渲染，点击右边collection目录下对应模型，然后按S来进行缩放，到这个程度大概就可以了，如果地图或者物体实在太大，可以调整渲染距离</p><p><img src="/images/blender/blender_img_02.png" alt="2"></p><h3 id="调整渲染距离"><a href="#调整渲染距离" class="headerlink" title="调整渲染距离"></a>调整渲染距离</h3><p><strong>需要修改两个地方的“结束点（End）”数值：</strong></p><p><strong>1. 修改 3D 视图的裁剪：</strong></p><ul><li><p>按 <strong><code>N</code></strong> 打开侧边栏 -&gt; <strong><code>View</code></strong> 选项卡。</p></li><li><p>找到 <strong><code>Clip Start</code></strong> 和 <strong><code>End</code></strong>。</p></li><li><p>将 <strong><code>End</code></strong> 的数值加个 0 或者改得很大（例如从 1000m 改为 10000m）。</p></li></ul><p><strong>2. 修改渲染相机的裁剪（为了渲染）：</strong></p><ul><li><p>选中你的<strong>相机对象</strong>。</p></li><li><p>在右侧属性面板，点击绿色摄像机图标。</p></li><li><p>找到 <strong><code>Lens</code></strong> -&gt; <strong><code>Clip Start</code></strong> 和 <strong><code>End</code></strong>。</p></li><li><p>同样将 <strong><code>End</code></strong> 的数值改得非常大，直到模型完全显示</p></li></ul><h3 id="调整相机位姿"><a href="#调整相机位姿" class="headerlink" title="调整相机位姿"></a>调整相机位姿</h3><p>为了方便我们后续渲染帧和视频，需要控制相机初始位姿在一个合理的位置，按下数字<code>0</code>进入相机视角，然后使用<code>shift + ~</code>来进行操作，此时可以动态调整相机，WASD移动，QE上下移动，鼠标控制方向，调整合适后点击左键保留</p><p><img src="/images/blender/blender_img_03.png" alt="3"></p><h3 id="相机轨迹"><a href="#相机轨迹" class="headerlink" title="相机轨迹"></a>相机轨迹</h3><p>为了得到理想轨迹，这里以360度环拍为例，我们不调整相机，而是调整它的控制杆，<code>shift A</code>插入一个空物体empty，选择纯轴，Axis，就会在原点创建一个空物体，我们把体院的camera按住左键和<code>shift</code>拖到empty上，得到这样的结果</p><p><img src="/images/blender/blender_img_04.png" alt="4"></p><p>然后选中empty进行旋转，可以看到相机也在同步进行运动</p><p><img src="/images/blender/blender_img_05.png" alt="5"></p><h3 id="调整光照"><a href="#调整光照" class="headerlink" title="调整光照"></a>调整光照</h3><p>调整光照一般有两个方法，分别是：</p><p>方法一：调亮世界环境”(World)</p><p>这是最快让整个模型变亮的方法，相当于把阴天变成晴天。</p><ol><li><p>在右侧属性面板，点击<strong>红色地球图标</strong> (World Properties)。</p></li><li><p>找到 <strong>Color (颜色)</strong>，把它往白色调（默认是很暗的灰色）。</p></li><li><p>找到 <strong>Strength (强度)</strong>，将数值从 <code>1.0</code> 提高到 <code>2.0</code> 或更高，直到画面亮度满意。</p><ul><li><p><em>优点：</em> 360度无死角变亮。</p></li><li><p><em>缺点：</em> 阴影会变淡，画面可能看起来比较“平”。</p></li></ul></li></ol><p>方法二：添加日光 (Sun Light)</p><p>如果你希望模型有明确的亮面和暗面（立体感），就像在太阳底下一样：</p><ol><li><p>在 3D 视图按 <strong><code>Shift</code> + <code>A</code></strong>。</p></li><li><p>选择 <strong>Light (灯光)</strong> -&gt; <strong>Sun (日光)</strong>。</p></li><li><p><strong>调整方向：</strong> 选中太阳图标，按 <strong><code>R</code></strong> 键旋转它。</p><ul><li><em>注意：</em> 日光的位置不重要，只有<strong>旋转角度</strong>会影响阴影的方向。</li></ul></li><li><p><strong>调整亮度：</strong></p><ul><li><p>选中灯光，点击右侧属性面板的<strong>绿色灯泡图标</strong> (Data)。</p></li><li><p>增加 <strong>Strength (强度)</strong>。在 Eevee 引擎下可能 <code>3-5</code> 就很亮了；在 Cycles 引擎下可能依然是 <code>1.0</code> 就够，或者需要更高。</p></li></ul></li></ol><p>这里使用方法二，效果如下（为了让效果调整明显，可以选择render模式）</p><p><img src="/images/blender/blender_img_06.png" alt="6"></p><p>在下方Timeline选取关键帧，选择渲染120帧结束，第一帧Z轴旋转0度，第120帧选择Z轴旋转360度，都要选择空物体empty调整，输入完成后按I保存</p><p><img src="/images/blender/blender_img_07.png" alt="7"></p><p><img src="/images/blender/blender_img_08.png" alt="8"></p><p>在时间线窗口，<strong>全选</strong>所有关键帧（按 <code>A</code>，所有钻石点变黄）。按 <strong><code>T</code></strong> 键。选择 <strong>Linear (线性)</strong>。然后按一下空格键播放，应该是完美匀速旋转的。</p><p><img src="/images/blender/blender_img_09.png" alt="9"></p><p>选取其他帧可以看到是很完美的，比如第95帧的Z轴就是319度</p><p><img src="/images/blender/blender_img_10.png" alt="10"></p><h3 id="视频输出"><a href="#视频输出" class="headerlink" title="视频输出"></a>视频输出</h3><p>默认 F12 只是渲染图片，要渲染视频需要改设置：</p><ol><li><p>点击右侧属性面板的<strong>打印机图标</strong> (Output Properties)。</p></li><li><p><strong>Output (输出路径)：</strong> 点击文件夹图标，选择一个保存视频的位置（比如桌面）。</p></li><li><p><strong>File Format (文件格式)：</strong> 将默认的 PNG 改为 <strong>FFmpeg Video</strong>。</p></li><li><p><strong>Encoding (编码)：</strong> 点开它。</p><ul><li><p>Container (容器) 选 <strong>MPEG-4</strong>。</p></li><li><p>Output Quality (输出质量) 自行选择即可</p></li></ul><p><img src="/images/blender/blender_img_11.png" alt="11"></p></li></ol><p>按<code>Ctrl + F12</code>进行输出，可以看到正在渲染的动画，最后完美得到结果视频。</p><h3 id="自定义相机轨迹"><a href="#自定义相机轨迹" class="headerlink" title="自定义相机轨迹"></a>自定义相机轨迹</h3><p>当需要自定义相机轨迹，比如让相机像过山车一样走曲线、拐弯、忽高忽低时，之前绑定空物体转圈的方法就不够用了，需要使用路径跟随（Follow Path）</p><p>可以理解成先在场景里铺设一条看不见的铁轨（曲线），然后把相机变成一辆矿车，让它死死地卡在铁轨上滑行</p><h4 id="添加曲线"><a href="#添加曲线" class="headerlink" title="添加曲线"></a>添加曲线</h4><p><strong>添加曲线：</strong> 按 <strong><code>Shift</code> + <code>A</code></strong> -&gt; <strong>Curve (曲线)</strong> -&gt; <strong>Bezier (贝塞尔曲线)</strong>。场景中会出现一条橙色的小弯线。</p><p><strong>初步调整：</strong> 这条线可能很小或是平躺在地上的。按 <strong><code>S</code></strong> 把它放大。按 <strong><code>G</code></strong> 把它移动到大概的位置（比如模型的上方或侧面）。</p><h4 id="编辑曲线"><a href="#编辑曲线" class="headerlink" title="编辑曲线"></a>编辑曲线</h4><ul><li><p>选中那条曲线，按 <strong><code>Tab</code></strong> 键进入<strong>编辑模式</strong>。</p></li><li><p>会看到曲线上有两个点，每个点都带着两根像“杠杆”一样的<strong>控制手柄</strong>。</p><ul><li><p><strong>移动点：</strong> 点击选中一个点，按 <strong><code>G</code></strong> 移动它。</p></li><li><p><strong>调整弯曲度：</strong> 点击选中杠杆末端的红点，按 <strong><code>G</code></strong> 或 <strong><code>R</code></strong>（旋转）来改变曲线的弯曲形状。</p></li></ul></li><li><p><strong>延长轨迹（重要）：</strong></p><ul><li><p>选中曲线最末端的一个点。</p></li><li><p>按 <strong><code>E</code> (Extrude, 挤出)</strong> 键，移动鼠标，点击左键。这样就“长”出了新的一段路。</p></li><li><p>重复按 <code>E</code>，画出您想要的复杂路径（S形、螺旋形都可以）。</p></li></ul></li><li><p><em>技巧：</em> 建议先按 <code>Numpad 7</code> 在顶视图画好平面路径，然后再按 <code>Numpad 1</code> 或 <code>3</code> 在侧视图调整高低起伏。</p></li><li><p>画好后，按 <strong><code>Tab</code></strong> 退回到<strong>物体模式</strong>。</p></li></ul><p><img src="/images/blender/blender_img_12.png" alt="12"></p><h4 id="物体绑定"><a href="#物体绑定" class="headerlink" title="物体绑定"></a>物体绑定</h4><p><strong>添加约束：</strong></p><ul><li><p>选中相机。</p></li><li><p>点击右侧属性面板的蓝色链条图标 (<strong>Object Constraint Properties</strong>)。</p></li><li><p>点击 <code>Add Object Constraint</code> (添加物体约束)，在第二栏选择 <strong>Follow Path (跟随路径)</strong>。</p></li></ul><p><strong>设置目标：</strong></p><ul><li><p>在约束面板里，点击 <strong>Target (目标)</strong> ，点击刚才画的那条<strong>贝塞尔曲线</strong>，在选择跟随曲线。</p></li><li><p>此时，相机应该会瞬间跳到曲线的起点。</p></li></ul><p><img src="/images/blender/blender_img_13.png" alt="13"></p><p>这时再点击上面图里的动画路径大按钮，按下空格就可以播放相机轨迹，这里我个人建议再按<code>0</code>从相机角度观察，可以及时调整轨迹</p><p><strong>相机视角问题：</strong></p><p>果勾选“Follow Curve”后，发现相机镜头不是朝前看，而是朝上或者横着看：</p><ul><li><p>在约束面板里调整 <strong>Forward Axis (前进轴)</strong> 和 <strong>Up Axis (向上轴)</strong>。</p></li><li><p>通常的正确组合是：Forward 选 <code>-Z</code> (负Z)，Up 选 <code>Y</code>。如果不因，就多试几个组合，直到相机视角在视图里看起来是正的。</p></li></ul><p><strong>控制速度</strong>：</p><ul><li><p>选中<strong>贝塞尔曲线</strong>（注意是选曲线，不是选相机）。</p></li><li><p>点击右侧绿色的曲线数据图标。</p></li><li><p>找到 <strong>Path Animation (路径动画)</strong> 这一栏。</p></li><li><p>调整 <strong>Frames (帧数)</strong> 的数值（调整完成后一定要改变渲染终点，比如我改成200帧，就需要设置结束帧到200）。</p><ul><li>默认是 100。如果想让它走慢点，就改成 200 或 300。（数值越大，走完全程花的时间越长，速度越慢）。</li></ul></li></ul><p><img src="/images/blender/blender_img_14.png" alt="14"></p><p>最后选择跟之前一样输出，就可以得到结果了。</p><h4 id="细分曲线"><a href="#细分曲线" class="headerlink" title="细分曲线"></a>细分曲线</h4><p>如果相机在拐弯时很生硬或者抖动，通常是因为曲线上的点太少了。</p><ul><li><p>选中曲线进入编辑模式 (<code>Tab</code>)。</p></li><li><p>全选所有点 (<code>A</code>)。</p></li><li><p>右键 -&gt; <strong>Subdivide (细分)</strong>。</p></li><li><p>这会增加更多控制点，让路径变得更圆润平滑。</p></li></ul><h3 id="关于点云文件的渲染（这里以ply为例）"><a href="#关于点云文件的渲染（这里以ply为例）" class="headerlink" title="关于点云文件的渲染（这里以ply为例）"></a>关于点云文件的渲染（这里以ply为例）</h3><p>我从<a href="https://graphics.stanford.edu/data/3Dscanrep/#uses">The Stanford 3D Scanning Repository</a>中下载了一个ply模型，导入进来仍然是选中后用<code>S</code>进行一些缩放，知道可以正常看见为止，随后如下操作</p><p><img src="/images/blender/blender_img_15.png" alt="15">将几何节点部分的结构做成这样（添加立方体，实例化于点上，实现实例），也就是把原来每个点做成立方体进行渲染，注意最后一个框中可以调节立方体大小，太小则不会相连导致有空洞，太大就会纹理不清晰</p><p>随后在着色部分进行操作，由于Stanford提供的文件就是纯白色的点云建模，没有纹理特征，所以添加节点完成后大概就是这样</p><p><img src="/images/blender/blender_img_16.png" alt="16"></p><p>注意这里的框住的矢量缩放可以不加，因为<code>颜色渐变</code> 节点只处理 0 到 1 之间的数值。如果你的模型坐标是 (10, 10, 10)，这三个数都大于 1，在颜色渐变里就会被判定为“超级白”，导致整个模型也是白的，所以有些时候是必要的</p><p>也可以在这里自己选择纹理进行绘制，但是和渲染关系就不大了</p><p><img src="/images/blender/blender_img_17.png" alt="17"></p><p>实际上一般情况下做完几何节点和着色两步之后就会成为一个3D模型，像glb和gltf一样可以进行之前说到的相机轨迹定制操作了。</p><h3 id="动态物体渲染"><a href="#动态物体渲染" class="headerlink" title="动态物体渲染"></a>动态物体渲染</h3><p>这就是一些技巧性的东西，把静态的渲染糅合一下就有了，比如说渲染一个车在路上走，然后我们拍摄这辆车</p><h4 id="相机固定观察物体的某一视角"><a href="#相机固定观察物体的某一视角" class="headerlink" title="相机固定观察物体的某一视角"></a>相机固定观察物体的某一视角</h4><p>如果相机绑定在车上，我们就只需要让车走，比如说场景不动，让车走一个轨迹，把车和Camera像之前固定空物体和camera一样绑定起来，给车加一个贝塞尔曲线轨迹约束就好了</p><p>简单来说就是绑定相机和物体，给物体加轨迹</p><h4 id="物体以一条曲线走，相机以另一个视角拍摄"><a href="#物体以一条曲线走，相机以另一个视角拍摄" class="headerlink" title="物体以一条曲线走，相机以另一个视角拍摄"></a>物体以一条曲线走，相机以另一个视角拍摄</h4><p>这个就是给相机和车分别加贝塞尔曲线约束，但是有一点不一样就是相机虽然移动了，但它可能看着其他地方，需要再给相机加一个约束，<code>Track To</code> (标准跟随)，<strong>设置 Target（目标）</strong> 为车（可能得调一下轴向，需要具体分析），然后就可以实现这个功能。</p><p>有一个小问题是关于两者的速度，因为两条线的默认时长可能都是 100 帧，但它们的长度不一样。我们就需要调整两条贝塞尔曲线的帧率来实现想要的效果。</p><p>如果觉得track to车的画面太死板的话可以在车旁边建一个空物体，把这个空物体绑到车上，然后track to这个空物体。</p>]]></content>
+      
+      
+      <categories>
+          
+          <category> Blender </category>
+          
+      </categories>
+      
+      
+        <tags>
+            
+            <tag> Blender </tag>
+            
+        </tags>
+      
+    </entry>
+    
+    
+    
+    <entry>
       <title>diffusers</title>
       <link href="/2025/11/13/diffusers/"/>
       <url>/2025/11/13/diffusers/</url>
@@ -69,7 +94,7 @@
       
       <categories>
           
-          <category> Python </category>
+          <category> Blender </category>
           
       </categories>
       
@@ -132,11 +157,11 @@
       
         <tags>
             
-            <tag> 机器学习 </tag>
-            
             <tag> Python </tag>
             
             <tag> 算法 </tag>
+            
+            <tag> 机器学习 </tag>
             
         </tags>
       

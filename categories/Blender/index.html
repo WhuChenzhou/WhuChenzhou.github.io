@@ -4,7 +4,7 @@
 
 <head>
     <meta charset="utf-8">
-    <meta name="keywords" content="分类, Chenzhou">
+    <meta name="keywords" content="分类: Blender, Chenzhou">
     <meta name="description" content="Chenzhou">
     <meta http-equiv="X-UA-Compatible" content="IE=edge">
     <meta name="viewport" content="width=device-width, initial-scale=1.0, user-scalable=no">
@@ -17,7 +17,7 @@
     <!-- Global site tag (gtag.js) - Google Analytics -->
 
 
-    <title>分类 | Chenzhou</title>
+    <title>分类: Blender | Chenzhou</title>
     <link rel="icon" type="image/png" href="/favicon.png">
     
 
@@ -404,7 +404,7 @@
                 
                 <a href="/categories/Blender/" title="Blender: 2">
                     <span class="chip center-align waves-effect waves-light
-                             chip-default "
+                             chip-active "
                             style="background-color: #F5EEF8;">Blender
                         <span class="tag-length">2</span>
                     </span>
@@ -436,65 +436,121 @@
 
 
     
-    <style type="text/css">
-    #category-radar {
-        width: 100%;
-        height: 360px;
-    }
-</style>
 
-<div class="container" data-aos="fade-up">
-    <div class="card">
-        <div id="category-radar" class="card-content"></div>
-    </div>
-</div>
+    <article id="articles" class="container articles">
+        <div class="row tags-posts">
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2025/11/22/blenderRender/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/16.jpg" class="responsive-img" alt="使用blender对模型进行渲染">
+                            
+                            <span class="card-title">使用blender对模型进行渲染</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
 
-<script type="text/javascript" src="/libs/echarts/echarts.min.js"></script>
-<script type="text/javascript">
-    let radarChart = echarts.init(document.getElementById('category-radar'));
 
-    
+这是个人整理的关于使用blender对模型进行渲染的文档，目前写到了gltf，glb，ply等，包含自定义轨迹等的用法，除此之外其他的一些模型或用法相关部分尚未进行总结。
 
-    let option = {
-        title: {
-            left: 'center',
-            text: '文章分类雷达图',
-            textStyle: {
-                fontWeight: 500,
-                fontSize: 22
-            }
-        },
-        tooltip: {},
-        radar: {
-            name: {
-                textStyle: {
-                    color: '#3C4858'
-                }
-            },
-            indicator: [{"name":"2025ICCV","max":4},{"name":"Blender","max":4},{"name":"Python","max":4},{"name":"Others","max":4}],
-            nameGap: 5,
-            center: ['50%','55%'],
-            radius: '66%'
-        },
-        series: [{
-            type: 'radar',
-            color: ['#3ecf8e'],
-            itemStyle: {normal: {areaStyle: {type: 'default'}}},
-            data : [
-                {
-                    value : [2,2,3,1],
-                    name : '文章分类数量'
-                }
-            ]
-        }]
-    };
+导入和调整模型文件首先open一个新项目，删去这里的方块，找
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-11-22
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Blender/" class="post-category">
+                                    Blender
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
 
-    radarChart.setOption(option);
-</script>
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Blender/">
+                            <span class="chip bg-color">Blender</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+            <div class="article tag-post col s12 m6 l4" data-aos="zoom-in">
+                <div class="card">
+                    <a href="/2025/10/18/BlenderProc-API/">
+                        <div class="card-image tag-image">
+                            
+                            
+                            <img src="/medias/featureimages/6.jpg" class="responsive-img" alt="BlenderProc API">
+                            
+                            <span class="card-title">BlenderProc API</span>
+                        </div>
+                    </a>
+                    <div class="card-content article-content">
+                        <div class="summary block-with-text">
+                            
+                                
 
-    
 
+这是从Blender官方教程目录中系统整理的BlenderProc API核心用法指南，涵盖了场景搭建、材质应用、相机设置及渲染输出等关键步骤的代码示例与参数详解。
+
+LoaderCLI下载外部资源blenderproc downlo
+                            
+                        </div>
+                        <div class="publish-info">
+                            <span class="publish-date">
+                                <i class="far fa-clock fa-fw icon-date"></i>2025-10-18
+                            </span>
+                            <span class="publish-author">
+                                
+                                <i class="fas fa-bookmark fa-fw icon-category"></i>
+                                
+                                <a href="/categories/Blender/" class="post-category">
+                                    Blender
+                                </a>
+                                
+                                
+                            </span>
+                        </div>
+                    </div>
+
+                    
+                    <div class="card-action article-tags">
+                        
+                        <a href="/tags/Blender/">
+                            <span class="chip bg-color">Blender</span>
+                        </a>
+                        
+                        <a href="/tags/BlenderProc/">
+                            <span class="chip bg-color">BlenderProc</span>
+                        </a>
+                        
+                    </div>
+                    
+                </div>
+            </div>
+            
+        </div>
+    </article>
 </main>
+
+
 
 
     <footer class="page-footer bg-color">
